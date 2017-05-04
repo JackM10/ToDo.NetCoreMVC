@@ -1,6 +1,13 @@
+bin/
+obj/
+packages/
+*.dll
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
+
+
 
 # Folder config file
 Desktop.ini
@@ -45,3 +52,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.dll
+*.suo
+.vs/ToDoListMVC/v14/.suo
+*.suo

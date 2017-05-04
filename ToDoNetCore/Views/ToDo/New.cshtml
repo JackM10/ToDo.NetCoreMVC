@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width-device-width" />
+	<title>.NET Core MVC - New</title>
+	<link rel="stylesheet" href="~/css/site.css" />
+	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
+</head>
+<body>
+<div>
+	<form method="post">
+	<p>
+		Please enter the Name:
+		<input type="text" class="form-control" placeholder="Entity name" name="newEntityName">
+	</p>
+	<p>
+		Please fill the the Description:
+		<input type="text" class="form-control" placeholder="Entity description" name="newEntityDescr">
+	</p>
+	<p>
+		<input type="submit" class="btn btn-primary" role="button" value="Save item" />
+	</p>
+	</form>
+</div>
+</body>
+</html>

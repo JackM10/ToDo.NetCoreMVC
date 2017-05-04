@@ -1,0 +1,36 @@
+﻿@model List<ToDoNetCore.Models.ToDoModel>
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width-device-width" />
+	<title>.NET Core MVC - Edit</title>
+	<link rel="stylesheet" href="~/css/site.css" />
+	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
+</head>
+<body>
+<div>
+	<form method="post">
+	<p>
+		Please fill the Name:
+		<input type="text" class="form-control" value="@ViewBag.EntityName" name="editedName">
+	</p>
+	<p>
+		Please fill the the Description:
+		<input type="text" class="form-control" value="@ViewBag.EntityDescr" name="editedDescr">
+	</p>
+	<p>
+		Now editing @ViewBag.EntityID element
+	</p>
+		<p><input type="submit" class="btn btn-warning" role="button" value="Save item #@ViewBag.entityID">
+	</p>
+	</form>
+</div>
+</body>
+</html>

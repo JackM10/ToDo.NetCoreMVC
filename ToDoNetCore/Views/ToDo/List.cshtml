@@ -1,0 +1,64 @@
+﻿@model System.Collections.Generic.List<ToDoNetCore.Models.ToDoModel>
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width-device-width"/>
+	<title>.NET Core MVC - Main</title>
+	<link rel="stylesheet" href="~/css/site.css" />
+	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
+</head>
+<body>
+<table class="table">
+	<thead>
+	<tr>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Action</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<th scope="row">
+			@foreach (var todo in Model)
+			{
+				<p>@todo.TaskId</p>
+			}
+		</th>
+		<td>
+			@foreach (var todo in Model)
+			{
+				<p>@todo.ShortName</p>
+			}
+		</td>
+		<td>
+			@foreach (var todo in Model)
+			{
+				<p>@todo.Description</p>
+			}
+		</td>
+		<td>
+			@foreach (var todo in Model)
+			{
+				<p>
+					<a class="btn btn-warning btn-xs" href="@Url.Action("Edit", "ToDo", new {entityId = todo.TaskId})" role="button">Edit</a>
+				</p>
+			}
+		</td>
+	</tr>
+	</tbody>
+</table>
+	
+<p>
+	<a class="btn btn-success" href="@Url.Action("New", "ToDo" )" role="button">Create New</a>
+</p>
+
+</body>
+</html>
