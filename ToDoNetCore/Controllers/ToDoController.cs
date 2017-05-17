@@ -35,17 +35,28 @@ namespace ToDoNetCore.Controllers
             ViewBag.EntityDescr = ToDoList[entityId].Description;
             if (editedName != null && editedDescr != null)
             {
-                ToDoList.Find(p => p.TaskId == entityId).ShortName = editedName;
-                ToDoList.Find(p => p.TaskId == entityId).Description = editedDescr;
+                var toDoEntityToReplace = ToDoList.Find(p => p.TaskId == entityId);
+                toDoEntityToReplace.ShortName = editedName;
+                toDoEntityToReplace.Description = editedDescr;
                 return RedirectToAction("List");
             }
+
             return View();
         }
 
-        public IActionResult Delete(int entityId)
+        public IActionResult Delete(string entityNameToRemove)
         {
-            ToDoList.RemoveAt(entityId);
-            RebuildList();
+            foreach (var td in ToDoList)
+            {
+                if (td.ShortName == entityNameToRemove)
+                {
+                    int idOfRemovingItem = td.TaskId;
+                    ToDoList.RemoveAt(idOfRemovingItem);
+                    RebuildList();
+                    break;
+                }
+            }
+
             return RedirectToAction("List");
         }
 
@@ -63,21 +74,42 @@ namespace ToDoNetCore.Controllers
 
 
         [ActionName("New")]
-        public IActionResult CreateNewItem(string newEntityName, string newEntityDescr)
+        public IActionResult CreateNewItem(string ShortName, string Description)
         {
-            int maxId = new int();
+            if (ShortName != null && Description != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    int maxId = new int();
+                    foreach (var td in ToDoList)
+                    {
+                        maxId = td.TaskId;
+                    }
+                    int idOfNewItem = ++maxId;
+                    ToDoList.Add(new ToDoModel { TaskId = idOfNewItem, ShortName = ShortName, Description = Description });
+
+                    return RedirectToAction("List");
+                }
+
+                return View(List());
+            }
+
+            return View();
+        }
+
+        public IActionResult ViewOneItem(int id)
+        {
             foreach (var td in ToDoList)
             {
-                maxId = td.TaskId;
+                if (td.TaskId == id)
+                {
+                    ViewBag.EntityDescrToView = td.Description;
+                    ViewBag.EntityNameToView = td.ShortName;
+                    break;
+                }
             }
-            int idOfNewItem = ++maxId;
-
-            if (newEntityName != null && newEntityDescr != null)
-            {
-                ToDoList.Add(new ToDoModel{TaskId = idOfNewItem, ShortName = newEntityName, Description = newEntityDescr});
-
-                return RedirectToAction("List");
-            }
+            ViewBag.EntityIdToView = id;
+            
             return View();
         }
     }

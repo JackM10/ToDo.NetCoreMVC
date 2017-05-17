@@ -1,0 +1,25 @@
+﻿@model List<ToDoNetCore.Models.ToDoModel>
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Item #@ViewBag.EntityIdToView</title>
+</head>
+<body>
+<div>
+	<form asp-action="List">
+	<p>Item ID: @ViewBag.EntityIdToView</p>
+	<p>Item Name: @ViewBag.EntityNameToView</p>
+	<p>Item Description: @ViewBag.EntityDescrToView</p>
+	<p>
+		<input type="submit" class="btn btn-success" role="button" value="Back to the List"/>
+	</p>
+	</form>
+</div>
+</body>
+</html>

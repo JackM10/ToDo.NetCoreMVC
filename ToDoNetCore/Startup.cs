@@ -24,7 +24,10 @@ namespace ToDoNetCore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc(controller => { controller.MapRoute("default", "{controller}/{action}/{id?}", new {controller = "ToDo", action = "List" }); });
+            app.UseMvc(controller =>
+            {
+                controller.MapRoute("default", "{controller}/{action}/{id?}",
+                    new {controller = "ToDo", action = "List"}); controller.MapRoute("view", "{id:int}", new { controller = "ToDo", action = "ViewOneItem" }); });
             app.UseStaticFiles();
             app.Run(async (context) =>
             {
