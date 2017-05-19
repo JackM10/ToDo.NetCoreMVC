@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -72,7 +75,6 @@ namespace ToDoNetCore.Controllers
             }
         }
 
-
         [ActionName("New")]
         public IActionResult CreateNewItem(string ShortName, string Description)
         {
@@ -112,5 +114,17 @@ namespace ToDoNetCore.Controllers
             
             return View();
         }
+
+        //[HttpPost]
+        //public IActionResult Upload()
+        //{
+        //    if (Request.Files.Count > 0)
+        //    {
+        //        var file = Request.Files[0];
+        //        var path = Path.Combine(IServer.MapPath("~/Images"), path2: fileName);
+        //        file.SaveAs(filename: path);
+        //    }
+        //    return RedirectToAction(actionName: "New");
+        //}
     }
 }

@@ -15,9 +15,10 @@
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/js/jquery-1.11.3.min.js"></script>
+	<script src="~/js/jquery.validate.min.js"></script>
+	<script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+	<script type="text/javascript" src="~/js/bootstrap-filestyle.min.js"> </script>
 </head>
 <body>
 <div>
@@ -36,6 +37,9 @@
 			<label asp-for="Description" class="col-md-2 control-label">Please fill the the Description:</label>
 			<input asp-for="Description" type="text" class="form-control" placeholder="Entity description">
 			<span asp-validation-for="Description" class="text-danger"></span>
+		</p>
+		<p>
+			<input type="file" data-buttonText="Attach file to ToDo" class="filestyle" name="file" />
 		</p>
 		<p>
 			<input type="submit" class="btn btn-primary" role="button" value="Save item"/>
