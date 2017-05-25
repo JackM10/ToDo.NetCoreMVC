@@ -8,6 +8,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -24,27 +26,43 @@ namespace ToDoNetCore.Controllers
             new ToDoModel { TaskId = 4, ShortName = "ToExploreAngular.JS", Description = "I must explore framework Angular.JS"}
         };
 
+        private IHostingEnvironment _enviroment;
+        private ApplicationContext _context;
+        private IHostingEnvironment _appEnvironment;
+
         #endregion
 
+        #region Constructors
+
+        public ToDoController(IHostingEnvironment environment)
+        {
+            _enviroment = environment;
+        }
+
+        #endregion
+
+        #region Action Methods
+        
         public IActionResult List()
         {
             return View(ToDoList);
         }
 
-        public IActionResult Edit(int entityId, string editedName, string editedDescr)
+        public IActionResult Edit(int entityId, ToDoModel editedToDo = null)
         {
-            ViewBag.EntityID = entityId;
-            ViewBag.EntityName = ToDoList[entityId].ShortName;
-            ViewBag.EntityDescr = ToDoList[entityId].Description;
-            if (editedName != null && editedDescr != null)
+            //ViewBag.EntityID = entityId;
+            //ViewBag.EntityName = ToDoList[entityId].ShortName;
+            //ViewBag.EntityDescr = ToDoList[entityId].Description;
+            if (editedToDo.ShortName != null && editedToDo.Description != null)
             {
                 var toDoEntityToReplace = ToDoList.Find(p => p.TaskId == entityId);
-                toDoEntityToReplace.ShortName = editedName;
-                toDoEntityToReplace.Description = editedDescr;
+                toDoEntityToReplace.ShortName = editedToDo.ShortName;
+                toDoEntityToReplace.Description = editedToDo.Description;
                 return RedirectToAction("List");
             }
-
-            return View();
+            ModelState.ClearValidationState("ShortName");
+            ModelState.ClearValidationState("Description");
+            return View(ToDoList[entityId]);
         }
 
         public IActionResult Delete(string entityNameToRemove)
@@ -111,20 +129,34 @@ namespace ToDoNetCore.Controllers
                 }
             }
             ViewBag.EntityIdToView = id;
-            
+
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Upload()
-        //{
-        //    if (Request.Files.Count > 0)
-        //    {
-        //        var file = Request.Files[0];
-        //        var path = Path.Combine(IServer.MapPath("~/Images"), path2: fileName);
-        //        file.SaveAs(filename: path);
-        //    }
-        //    return RedirectToAction(actionName: "New");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> FileUpload(IFormFile uploadedFile)
+        {
+            if (uploadedFile != null)
+            {
+                string pathToTheFileInApp = "/UploadedFiles/" + uploadedFile.FileName;
+                //saving file in UploadedFiles folder in App:
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + pathToTheFileInApp, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+                var file = new FileModel {Name = uploadedFile.FileName, Path = pathToTheFileInApp};
+                _context.File.Add(file);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("List");
+        }
+
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        #endregion
     }
 }

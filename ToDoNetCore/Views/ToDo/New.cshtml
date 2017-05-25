@@ -22,6 +22,7 @@
 </head>
 <body>
 <div>
+	
 	<form asp-action="New" method="post">
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -39,7 +40,9 @@
 			<span asp-validation-for="Description" class="text-danger"></span>
 		</p>
 		<p>
-			<input type="file" data-buttonText="Attach file to ToDo" class="filestyle" name="file" />
+			<input asp-action="FileUpload" asp-controller="ToDo" method="post" enctype="multipart/form-data"/>
+			<input type="file" name="uploadedFile"/> <br>
+			<input type="submit" value="Upload"/>
 		</p>
 		<p>
 			<input type="submit" class="btn btn-primary" role="button" value="Save item"/>

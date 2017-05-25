@@ -28,20 +28,20 @@
 			<div class="form-group">
 				<p>
 					<label asp-for="ShortName" class="col-md-2 control-label">Please fill the Name:</label>
-					<input asp-for="ShortName" type="text" class="form-control" value="@ViewBag.EntityName" name="editedName">
+					<input asp-for="ShortName" type="text" class="form-control" name="ShortName">
 					<span asp-validation-for="ShortName" class="text-danger"></span>
 				</p>
 			</div>
 		</div>
 			<p>
 				<label asp-for="Description" class="col-md-2 control-label">Please fill the the Description:</label>
-				<input asp-for="Description" type="text" class="form-control" value="@ViewBag.EntityDescr" name="editedDescr">
+				<input asp-for="Description" type="text" class="form-control" name="Description">
 				<span asp-validation-for="Description" class="text-danger"></span>
 			</p>
-			<p>
-				Now editing @ViewBag.EntityID element
-			</p>
-		<p><input type="submit" class="btn btn-warning" role="button" value="Save item #@ViewBag.entityID">
+		<p>
+			Now editing @Model.TaskId
+		</p>
+		<p><input type="submit" class="btn btn-warning" role="button" value="Save item #@Model.TaskId">
 		</p>
 	</form>
 </div>
