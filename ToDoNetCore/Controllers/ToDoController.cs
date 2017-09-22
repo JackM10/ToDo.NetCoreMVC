@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Caching;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using ToDoNetCore.Models;
@@ -17,6 +18,7 @@ namespace ToDoNetCore.Controllers
     public class ToDoController : Controller
     {
         #region Fields
+
         public static List<ToDoModel> ToDoList = new List<ToDoModel>
         {
             new ToDoModel { TaskId = 0, ShortName = "ToLearnMVC", Description = "I must gain Junior level in .NET MVC"},
@@ -152,6 +154,7 @@ namespace ToDoNetCore.Controllers
             return RedirectToAction("List");
         }
 
+        [ResponseCache(Duration = Int32.MaxValue)]
         public IActionResult About()
         {
             return View();

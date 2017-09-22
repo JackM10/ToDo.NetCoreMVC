@@ -18,6 +18,34 @@
 	<script src="~/js/jquery-1.11.3.min.js"></script>
 	<script src="~/js/jquery.validate.min.js"></script>
 	<script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+	
+	<style>
+		.mouseOverAndLeave {
+			padding: 1px 0px;
+			margin: 1px 0px;
+		}
+		.mouseOverAndLeave:hover  {
+			background-color: red;
+		}
+
+	</style>
+	<script>
+		function onMouseOver(placeholder)
+		{
+			$(placeholder).css("background", "#e6f2ff");
+		}
+ 
+		function onMouseLeave(placeholder)
+		{
+			$(placeholder).css("background", "");
+		}
+ 
+		$(function ()
+		{
+			$(".mouseOverAndLeave").mouseover(function () { onMouseOver(this); })
+			$(".mouseOverAndLeave").mouseleave(function () { onMouseLeave(this); })
+		})
+	</script>
 
 </head>
 <body>
