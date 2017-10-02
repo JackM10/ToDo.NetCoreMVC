@@ -8,9 +8,10 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Caching;
+//using System.Web.Caching;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -28,26 +29,26 @@ namespace ToDoNetCore.Controllers
             new ToDoModel { TaskId = 4, ShortName = "ToExploreAngular.JS", Description = "I must explore framework Angular.JS"}
         };
 
-        private IHostingEnvironment _enviroment;
-        private ApplicationContext _context;
+        private readonly ToDoContext _context;
         private IHostingEnvironment _appEnvironment;
 
         #endregion
 
         #region Constructors
-
-        public ToDoController(IHostingEnvironment environment)
+        
+        public ToDoController(ToDoContext context, IHostingEnvironment appEnvironment)
         {
-            _enviroment = environment;
+            _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         #endregion
 
         #region Action Methods
-        
-        public IActionResult List()
+
+        public async Task<IActionResult> List()
         {
-            return View(ToDoList);
+            return View(await _context.ToDo.ToListAsync());
         }
 
         public IActionResult Edit(int entityId, ToDoModel editedToDo = null)
@@ -67,20 +68,18 @@ namespace ToDoNetCore.Controllers
             return View(ToDoList[entityId]);
         }
 
-        public IActionResult Delete(string entityNameToRemove)
+        public async Task<IActionResult> Delete(string entityNameToRemove)
         {
-            foreach (var td in ToDoList)
+            if (entityNameToRemove == null)
             {
-                if (td.ShortName == entityNameToRemove)
-                {
-                    int idOfRemovingItem = td.TaskId;
-                    ToDoList.RemoveAt(idOfRemovingItem);
-                    RebuildList();
-                    break;
-                }
+                return NotFound();
             }
 
-            return RedirectToAction("List");
+            var todo = await _context.ToDo.SingleOrDefaultAsync(m => m.ShortName == entityNameToRemove);
+            _context.ToDo.Remove(todo);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(List));
         }
 
         /// <summary>
@@ -95,29 +94,53 @@ namespace ToDoNetCore.Controllers
             }
         }
 
-        [ActionName("New")]
-        public IActionResult CreateNewItem(string ShortName, string Description)
+        public async Task<IActionResult> New([Bind("TaskId,ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
-            if (ShortName != null && Description != null)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    int maxId = new int();
-                    foreach (var td in ToDoList)
-                    {
-                        maxId = td.TaskId;
-                    }
-                    int idOfNewItem = ++maxId;
-                    ToDoList.Add(new ToDoModel { TaskId = idOfNewItem, ShortName = ShortName, Description = Description });
-
-                    return RedirectToAction("List");
-                }
-
-                return View(List());
+                _context.Add(tdModel);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(List));
             }
 
-            return View();
+            if (uploadedFile != null)
+            {
+                string path = "/Files/" + uploadedFile.FileName;
+                using (var filestraem = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(filestraem);
+                }
+                FileModel file = new FileModel {Name = uploadedFile.FileName, Path = path};
+                _context.File.Add(file);
+                _context.SaveChanges();
+            }
+
+            return View(tdModel);
         }
+        
+        //[ActionName("New")]
+        //public IActionResult CreateNewItem(string ShortName, string Description)
+        //{
+        //    if (ShortName != null && Description != null)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            int maxId = new int();
+        //            foreach (var td in ToDoList)
+        //            {
+        //                maxId = td.TaskId;
+        //            }
+        //            int idOfNewItem = ++maxId;
+        //            ToDoList.Add(new ToDoModel { TaskId = idOfNewItem, ShortName = ShortName, Description = Description });
+
+        //            return RedirectToAction("List");
+        //        }
+
+        //        return View(List());
+        //    }
+
+        //    return View();
+        //}
 
         public IActionResult ViewOneItem(int id)
         {
@@ -135,24 +158,35 @@ namespace ToDoNetCore.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> FileUpload(IFormFile uploadedFile)
-        {
-            if (uploadedFile != null)
-            {
-                string pathToTheFileInApp = "/UploadedFiles/" + uploadedFile.FileName;
-                //saving file in UploadedFiles folder in App:
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + pathToTheFileInApp, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
-                var file = new FileModel {Name = uploadedFile.FileName, Path = pathToTheFileInApp};
-                _context.File.Add(file);
-                _context.SaveChanges();
-            }
 
-            return RedirectToAction("List");
-        }
+        #region File Upload
+        //private IHostingEnvironment _appEnvironment;
+
+        //public ToDoController(IHostingEnvironment environment)
+        //{
+        //    _enviroment = environment;
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> FileUpload(IFormFile uploadedFile)
+        //{
+        //    if (uploadedFile != null)
+        //    {
+        //        string pathToTheFileInApp = "/UploadedFiles/" + uploadedFile.FileName;
+        //        //saving file in UploadedFiles folder in App:
+        //        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + pathToTheFileInApp, FileMode.Create))
+        //        {
+        //            await uploadedFile.CopyToAsync(fileStream);
+        //        }
+        //        var file = new FileModel {Name = uploadedFile.FileName, Path = pathToTheFileInApp};
+        //        _context.File.Add(file);
+        //        _context.SaveChanges();
+        //    }
+
+        //    return RedirectToAction("List");
+        //}
+
+#endregion
 
         [ResponseCache(Duration = Int32.MaxValue)]
         public IActionResult About()

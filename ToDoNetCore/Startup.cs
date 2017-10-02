@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ToDoNetCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToDoNetCore
 {
@@ -15,6 +17,10 @@ namespace ToDoNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            var connection =
+                @"Server=(localdb)\MSSQLLocalDB;Database=ToDoNetCore;Trusted_Connection=True;";
+            services.AddDbContext<ToDoContext>(options => options.UseSqlServer(connection));
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
