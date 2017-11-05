@@ -20,14 +20,14 @@ namespace ToDoNetCore.Controllers
     {
         #region Fields
 
-        public static List<ToDoModel> ToDoList = new List<ToDoModel>
-        {
-            new ToDoModel { TaskId = 0, ShortName = "ToLearnMVC", Description = "I must gain Junior level in .NET MVC"},
-            new ToDoModel { TaskId = 1, ShortName = "ToLearnJS", Description = "I must gain Trainee level in JavaScript"},
-            new ToDoModel { TaskId = 2, ShortName = "ToLearnTFS", Description = "I must look how MS Team Foundation Server works"},
-            new ToDoModel { TaskId = 3, ShortName = "ToExploreNode.JS", Description = "I must explore framework Node.JS"},
-            new ToDoModel { TaskId = 4, ShortName = "ToExploreAngular.JS", Description = "I must explore framework Angular.JS"}
-        };
+        //public static List<ToDoModel> ToDoList = new List<ToDoModel>
+        //{
+        //    new ToDoModel { TaskId = 0, ShortName = "ToLearnMVC", Description = "I must gain Junior level in .NET MVC"},
+        //    new ToDoModel { TaskId = 1, ShortName = "ToLearnJS", Description = "I must gain Trainee level in JavaScript"},
+        //    new ToDoModel { TaskId = 2, ShortName = "ToLearnTFS", Description = "I must look how MS Team Foundation Server works"},
+        //    new ToDoModel { TaskId = 3, ShortName = "ToExploreNode.JS", Description = "I must explore framework Node.JS"},
+        //    new ToDoModel { TaskId = 4, ShortName = "ToExploreAngular.JS", Description = "I must explore framework Angular.JS"}
+        //};
 
         private readonly ToDoContext _context;
         private IHostingEnvironment _appEnvironment;
@@ -35,7 +35,7 @@ namespace ToDoNetCore.Controllers
         #endregion
 
         #region Constructors
-        
+
         public ToDoController(ToDoContext context, IHostingEnvironment appEnvironment)
         {
             _context = context;
@@ -51,21 +51,53 @@ namespace ToDoNetCore.Controllers
             return View(await _context.ToDo.ToListAsync());
         }
 
-        public IActionResult Edit(int entityId, ToDoModel editedToDo = null)
+        [HttpPost]
+        public async Task<IActionResult> Edit(int entityId, [Bind("entityId")] ToDoModel editedToDo)
         {
-            //ViewBag.EntityID = entityId;
-            //ViewBag.EntityName = ToDoList[entityId].ShortName;
-            //ViewBag.EntityDescr = ToDoList[entityId].Description;
-            if (editedToDo.ShortName != null && editedToDo.Description != null)
+            if (entityId != editedToDo.TaskId)
             {
-                var toDoEntityToReplace = ToDoList.Find(p => p.TaskId == entityId);
-                toDoEntityToReplace.ShortName = editedToDo.ShortName;
-                toDoEntityToReplace.Description = editedToDo.Description;
-                return RedirectToAction("List");
+                return NotFound();
             }
-            ModelState.ClearValidationState("ShortName");
-            ModelState.ClearValidationState("Description");
-            return View(ToDoList[entityId]);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(editedToDo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (ToDoExist(editedToDo.TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(List));
+            }
+
+            return View(editedToDo);
+
+            //if (editedToDo.ShortName != null && editedToDo.Description != null)
+            //{
+            //    var toDoEntityToReplace = await _context.ToDo.SingleOrDefaultAsync(p => p.TaskId == entityId);
+            //    toDoEntityToReplace.ShortName = editedToDo.ShortName;
+            //    toDoEntityToReplace.Description = editedToDo.Description;
+            //    return RedirectToAction("List");
+            //}
+            //ModelState.ClearValidationState("ShortName");
+            //ModelState.ClearValidationState("Description");
+            //return View(ToDoList[entityId]);
+        }
+
+        private bool ToDoExist(int taskId)
+        {
+            return _context.ToDo.Any(e => e.TaskId == taskId);
         }
 
         public async Task<IActionResult> Delete(string entityNameToRemove)
@@ -86,22 +118,24 @@ namespace ToDoNetCore.Controllers
         /// This method will recreate list of tasks, so it'll have correct ID's 
         /// (if we remove 2nd elemend, we'll have 0, 1, 3 list, this method will rebuild it to 0, 1, 2)
         /// </summary>
-        private void RebuildList()
-        {
-            for (int i = 0; i < ToDoList.Count; i++)
-            {
-                ToDoList[i].TaskId = i;
-            }
-        }
+        //private void RebuildList()
+        //{
+        //    for (int i = 0; i < ToDoList.Count; i++)
+        //    {
+        //        ToDoList[i].TaskId = i;
+        //    }
+        //}
 
         public async Task<IActionResult> New([Bind("TaskId,ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(tdModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(List));
+                return View(tdModel);
             }
+
+            tdModel.TaskId = 15;
+
+            _context.Add(tdModel);
 
             if (uploadedFile != null)
             {
@@ -110,14 +144,14 @@ namespace ToDoNetCore.Controllers
                 {
                     await uploadedFile.CopyToAsync(filestraem);
                 }
-                FileModel file = new FileModel {Name = uploadedFile.FileName, Path = path};
+                FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
                 _context.File.Add(file);
                 _context.SaveChanges();
             }
-
-            return View(tdModel);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(List));
         }
-        
+
         //[ActionName("New")]
         //public IActionResult CreateNewItem(string ShortName, string Description)
         //{
@@ -144,7 +178,7 @@ namespace ToDoNetCore.Controllers
 
         public IActionResult ViewOneItem(int id)
         {
-            foreach (var td in ToDoList)
+            foreach (var td in _context.ToDo)
             {
                 if (td.TaskId == id)
                 {
@@ -158,39 +192,10 @@ namespace ToDoNetCore.Controllers
             return View();
         }
 
-
-        #region File Upload
-        //private IHostingEnvironment _appEnvironment;
-
-        //public ToDoController(IHostingEnvironment environment)
-        //{
-        //    _enviroment = environment;
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> FileUpload(IFormFile uploadedFile)
-        //{
-        //    if (uploadedFile != null)
-        //    {
-        //        string pathToTheFileInApp = "/UploadedFiles/" + uploadedFile.FileName;
-        //        //saving file in UploadedFiles folder in App:
-        //        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + pathToTheFileInApp, FileMode.Create))
-        //        {
-        //            await uploadedFile.CopyToAsync(fileStream);
-        //        }
-        //        var file = new FileModel {Name = uploadedFile.FileName, Path = pathToTheFileInApp};
-        //        _context.File.Add(file);
-        //        _context.SaveChanges();
-        //    }
-
-        //    return RedirectToAction("List");
-        //}
-
-#endregion
-
         [ResponseCache(Duration = Int32.MaxValue)]
         public IActionResult About()
         {
+            ViewBag.CachedTime = DateTime.Now.Second.ToString();
             return View();
         }
 

@@ -55,7 +55,7 @@
 
 <div>
 
-	<form asp-action="New" method="post">
+	<form asp-action="New" method="post" enctype="multipart/form-data">
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
@@ -76,7 +76,7 @@
 			</div>
 </p>
 		<p>
-			<input asp-action="FileUpload" asp-controller="ToDo" method="post" enctype="multipart/form-data"/>
+			<input asp-action="New" asp-controller="ToDo" method="post" />
 			<input type="file" name="uploadedFile"/> <br>
 			<input type="submit" value="Upload"/>
 		</p>

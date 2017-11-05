@@ -49,7 +49,8 @@
 			{
 				<p>
 					<a class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
-					<a class="btn btn-warning btn-xs" href="@Url.Action("Edit", "ToDo", new {entityId = todo.TaskId})" role="button">Edit</a>
+					<a class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
+					@*<a class="btn btn-warning btn-xs" href="@Url.Action("Edit", "ToDo", new {entityId = todo.TaskId})" role="button">Edit</a>*@
 					<a class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
 				</p>
 			}
