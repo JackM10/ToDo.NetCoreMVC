@@ -8,7 +8,9 @@ namespace ToDoNetCore.Models
 {
     public class ToDoContext : DbContext
     {
-        public ToDoContext() : base() { }
-        public DbSet<ToDoModel> Entities { get; set; }
+        public ToDoContext(DbContextOptions<ToDoContext> options) : base(options) { }
+
+        public DbSet<ToDoModel> ToDo { get; set; }
+        public DbSet<FileModel> File { get; set; }
     }
 }

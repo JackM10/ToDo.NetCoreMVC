@@ -192,10 +192,17 @@ namespace ToDoNetCore.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = Int32.MaxValue)]
-        public IActionResult About()
+        [ResponseCache(Duration = 30)]
+        //  try to click on ClientCached link and you will see that it is cached:
+        // explanation: During a browser session, browsing multiple pages within the website or using back and forward button to visit the pages, 
+        // content will be served from the local browser cache (if not expired). 
+        // But when page is refreshed via F5 , the request will be go to the server and page content will get refreshed. 
+        // You can verify it via refreshing contact page using F5. So when you hit F5, response caching expiration value has no role to play to serve the content. 
+        // You should see 200 response for contact request.
+        // http://www.talkingdotnet.com/response-caching-in-asp-net-core-1-1/
+        public IActionResult ClientCached()
         {
-            ViewBag.CachedTime = DateTime.Now.Second.ToString();
+            ViewBag.CachedTime = DateTime.Now.ToString();
             return View();
         }
 
