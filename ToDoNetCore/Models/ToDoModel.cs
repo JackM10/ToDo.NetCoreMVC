@@ -25,12 +25,4 @@ namespace ToDoNetCore.Models
         public string Name { get; set; }
         public string Path { get; set; }
     }
-
-    public class ToDoContext : DbContext
-    {
-        public ToDoContext(DbContextOptions<ToDoContext> options) : base(options) { }
-
-        public DbSet<ToDoModel> ToDo { get; set; }
-        public DbSet<FileModel> File { get; set; }
-    }
 }
