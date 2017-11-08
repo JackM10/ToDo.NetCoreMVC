@@ -12,6 +12,7 @@ using System.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -20,26 +21,19 @@ namespace ToDoNetCore.Controllers
     {
         #region Fields
 
-        //public static List<ToDoModel> ToDoList = new List<ToDoModel>
-        //{
-        //    new ToDoModel { TaskId = 0, ShortName = "ToLearnMVC", Description = "I must gain Junior level in .NET MVC"},
-        //    new ToDoModel { TaskId = 1, ShortName = "ToLearnJS", Description = "I must gain Trainee level in JavaScript"},
-        //    new ToDoModel { TaskId = 2, ShortName = "ToLearnTFS", Description = "I must look how MS Team Foundation Server works"},
-        //    new ToDoModel { TaskId = 3, ShortName = "ToExploreNode.JS", Description = "I must explore framework Node.JS"},
-        //    new ToDoModel { TaskId = 4, ShortName = "ToExploreAngular.JS", Description = "I must explore framework Angular.JS"}
-        //};
-
         private readonly ToDoContext _context;
         private IHostingEnvironment _appEnvironment;
+        private readonly ILogger<ToDoController> _log;
 
         #endregion
 
         #region Constructors
 
-        public ToDoController(ToDoContext context, IHostingEnvironment appEnvironment)
+        public ToDoController(ToDoContext context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log)
         {
             _context = context;
             _appEnvironment = appEnvironment;
+            _log = log;
         }
 
         #endregion
@@ -114,26 +108,17 @@ namespace ToDoNetCore.Controllers
             return RedirectToAction(nameof(List));
         }
 
-        /// <summary>
-        /// This method will recreate list of tasks, so it'll have correct ID's 
-        /// (if we remove 2nd elemend, we'll have 0, 1, 3 list, this method will rebuild it to 0, 1, 2)
-        /// </summary>
-        //private void RebuildList()
-        //{
-        //    for (int i = 0; i < ToDoList.Count; i++)
-        //    {
-        //        ToDoList[i].TaskId = i;
-        //    }
-        //}
-
-        public async Task<IActionResult> New([Bind("TaskId,ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
+        public async Task<IActionResult> New([Bind("ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
             if (!ModelState.IsValid)
             {
                 return View(tdModel);
             }
 
-            tdModel.TaskId = 15;
+            //if (isToDoExists(tdModel.ShortName))
+            //{
+                
+            //}
 
             _context.Add(tdModel);
 
@@ -149,32 +134,9 @@ namespace ToDoNetCore.Controllers
                 _context.SaveChanges();
             }
             await _context.SaveChangesAsync();
+            TempData["ToDoIsCreated"] = true;
             return RedirectToAction(nameof(List));
         }
-
-        //[ActionName("New")]
-        //public IActionResult CreateNewItem(string ShortName, string Description)
-        //{
-        //    if (ShortName != null && Description != null)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            int maxId = new int();
-        //            foreach (var td in ToDoList)
-        //            {
-        //                maxId = td.TaskId;
-        //            }
-        //            int idOfNewItem = ++maxId;
-        //            ToDoList.Add(new ToDoModel { TaskId = idOfNewItem, ShortName = ShortName, Description = Description });
-
-        //            return RedirectToAction("List");
-        //        }
-
-        //        return View(List());
-        //    }
-
-        //    return View();
-        //}
 
         public IActionResult ViewOneItem(int id)
         {
@@ -192,11 +154,34 @@ namespace ToDoNetCore.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = Int32.MaxValue)]
-        public IActionResult About()
+        [ResponseCache(Duration = 30)]
+        //  try to click on ClientCached link and you will see that it is cached:
+        // explanation: During a browser session, browsing multiple pages within the website or using back and forward button to visit the pages, 
+        // content will be served from the local browser cache (if not expired). 
+        // But when page is refreshed via F5 , the request will be go to the server and page content will get refreshed. 
+        // You can verify it via refreshing contact page using F5. So when you hit F5, response caching expiration value has no role to play to serve the content. 
+        // You should see 200 response for contact request.
+        // http://www.talkingdotnet.com/response-caching-in-asp-net-core-1-1/
+        public IActionResult ClientCached()
         {
-            ViewBag.CachedTime = DateTime.Now.Second.ToString();
+            _log.LogInformation("hit!");
+            ViewBag.CachedTime = DateTime.Now.ToString();
             return View();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult IsToDoExists(string shortName)
+        {
+            if (_context.ToDo.Any(td => td.ShortName == shortName))
+            {
+                return Json(data: $"ToDo with the same name already in DB.");
+            }
+
+            return Json(data: true);
         }
 
         #endregion

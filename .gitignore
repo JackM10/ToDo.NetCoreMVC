@@ -56,3 +56,5 @@ Temporary Items
 *.suo
 .vs/ToDoListMVC/v14/.suo
 *.suo
+
+.vscode

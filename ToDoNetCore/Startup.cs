@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ToDoNetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using ToDoNetCore.Controllers;
 
 namespace ToDoNetCore
 {
@@ -39,6 +40,8 @@ namespace ToDoNetCore
             {
                 await context.Response.WriteAsync("app.UseMVC skipped - wrong controller selected!");
             });
+
+            loggerFactory.AddFile("ToDo_{Date}.txt");
         }
     }
 }

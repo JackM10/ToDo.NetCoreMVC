@@ -8,20 +8,6 @@
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
 </head>
-
-	<script type="text/javascript">
-		var unauthorized = '@TempData["ToDoIsCreated"]';
-		//debugger;
-	</script>
-
-
-@*<script>
-	
-	var TmpDt = (TempData["ToDoIsCreated"]);
-	debugger;
-	if (TempData["ToDoIsCreated"] === true)
-		alert('Sucessfully created!');
-</script>*@
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
@@ -36,28 +22,22 @@
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li>@Html.ActionLink("Create new ToDo", "New", "ToDo")</li>
-				<li>@Html.ActionLink("About", "ClientCached", "ToDo")</li>
+				<li>@Html.ActionLink("ClientCached", "ClientCached", "ToDo")</li>
+				<li>@Html.ActionLink("ServerCached", "ServerCached", "MemoryCache")</li>
 			</ul>
 		</div>
 	</div>
 </div>
-	
-@*<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:indianred">
-	<div class="navbar-header">
-		<span class="label" title="123" />
-	</div>
-</div>*@
+<div class="container body-content">
+	<p>
+		@RenderBody()
+	</p>
+		<hr/>
+	<footer>
+		<p>&copy; @DateTime.Now.Year - All Rights reserverd, ToDo app</p>
+	</footer>
+</div>
 
-		<div class="container body-content">
-			<p>
-				@RenderBody()
-			</p>
-			<hr />
-			<footer>
-				<p>&copy; @DateTime.Now.Year - All Rights reserverd, ToDo app</p>
-			</footer>
-		</div>
-
-		@RenderSection("scripts", required: false)
+@RenderSection("scripts", required: false)
 </body>
 </html>

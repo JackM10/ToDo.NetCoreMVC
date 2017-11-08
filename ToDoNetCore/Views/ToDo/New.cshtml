@@ -2,7 +2,9 @@
 @model ToDoNetCore.Models.ToDoModel
 
 @{
-	Layout = null;
+	ViewBag.Title = "Create New ToDo";
+	Layout = "_Layout";
+}
 }
 
 <!DOCTYPE html>
@@ -82,7 +84,7 @@
 		</p>
 		<p>
 			<input type="submit" class="btn btn-primary" role="button" value="Save item"/>
-			<a asp-action="List" class="btn btn-success"> Back to List</a>
+			<a asp-action="List" class="btn btn-success"> <font color="black"><b>< </b></font>Back to List</a>
 		</p>
 	</form>
 </div>

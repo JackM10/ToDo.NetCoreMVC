@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ToDoNetCore.Models
@@ -13,6 +14,7 @@ namespace ToDoNetCore.Models
         public int TaskId { get; set; }
         [StringLength(60, MinimumLength = 5)]
         [Required]
+        [Remote(action: "IsToDoExists", controller: "ToDo")]
         public string ShortName { get; set; }
         [StringLength(60, MinimumLength = 5)]
         [Required]
@@ -24,13 +26,5 @@ namespace ToDoNetCore.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
-    }
-
-    public class ToDoContext : DbContext
-    {
-        public ToDoContext(DbContextOptions<ToDoContext> options) : base(options) { }
-
-        public DbSet<ToDoModel> ToDo { get; set; }
-        public DbSet<FileModel> File { get; set; }
     }
 }
