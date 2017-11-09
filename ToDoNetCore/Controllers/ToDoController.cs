@@ -115,11 +115,6 @@ namespace ToDoNetCore.Controllers
                 return View(tdModel);
             }
 
-            //if (isToDoExists(tdModel.ShortName))
-            //{
-                
-            //}
-
             _context.Add(tdModel);
 
             if (uploadedFile != null)

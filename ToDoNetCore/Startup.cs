@@ -18,6 +18,7 @@ namespace ToDoNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddResponseCompression();
 
             var connection =
                 @"Server=(localdb)\MSSQLLocalDB;Database=ToDoNetCore;Trusted_Connection=True;";
@@ -41,6 +42,7 @@ namespace ToDoNetCore
                 await context.Response.WriteAsync("app.UseMVC skipped - wrong controller selected!");
             });
 
+            app.UseResponseCompression();
             loggerFactory.AddFile("ToDo_{Date}.txt");
         }
     }
