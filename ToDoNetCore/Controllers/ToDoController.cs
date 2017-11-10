@@ -45,6 +45,21 @@ namespace ToDoNetCore.Controllers
             return View(await _context.ToDo.ToListAsync());
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var todo = await _context.ToDo.SingleOrDefaultAsync(m => m.TaskId == id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            return View(todo);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Edit(int entityId, [Bind("entityId")] ToDoModel editedToDo)
         {

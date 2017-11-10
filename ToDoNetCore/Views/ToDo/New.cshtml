@@ -52,36 +52,33 @@
 	</script>
 </head>
 <body>
-
-
-
 <div>
 
 	<form asp-action="New" method="post" enctype="multipart/form-data">
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-group">
-				<div class="mouseOverAndLeave">
-					<p>
-						<label asp-for="ShortName" class="col-md-2 control-label">Please enter the Name:</label>
-						<input asp-for="ShortName" type="text" class="form-control" placeholder="Entity name">
-						<span asp-validation-for="ShortName" class="text-danger"></span>
-					</p>
-				</div>
-			</div>
-		</div>
-		<p>
+		<div class="form-group">
 			<div class="mouseOverAndLeave">
-				<label asp-for="Description" class="col-md-2 control-label">Please fill the the Description:</label>
-				<input asp-for="Description" type="text" class="form-control" placeholder="Entity description">
-			<span asp-validation-for="Description" class="text-danger"></span>
+				<p>
+					<label asp-for="ShortName" class="col-md-2 control-label">Please enter the Name:</label>
+					<input asp-for="ShortName" type="text" class="form-control" placeholder="Entity name">
+					<span asp-validation-for="ShortName" class="text-danger"></span>
+				</p>
 			</div>
-</p>
+			<p>
+				<div class="mouseOverAndLeave">
+					<label asp-for="Description" class="col-md-2 control-label">Please fill the the Description:</label>
+					<input asp-for="Description" type="text" class="form-control" placeholder="Entity description">
+					<span asp-validation-for="Description" class="text-danger"></span>
+				</div>
+			</p>
 		<p>
 			<input asp-action="New" asp-controller="ToDo" method="post" />
 			<input type="file" name="uploadedFile"/> <br>
 			<input type="submit" value="Upload"/>
 		</p>
+			</div>
+		</div>
 		<p>
 			<input type="submit" class="btn btn-primary" role="button" value="Save item"/>
 			<a asp-action="List" class="btn btn-success"> <font color="black"><b>< </b></font>Back to List</a>
