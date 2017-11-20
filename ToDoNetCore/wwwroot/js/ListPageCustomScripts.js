@@ -1,5 +1,3 @@
-﻿var isToDoCreated = '@TempData["ToDoIsCreated"]';
-debugger;
-if (isToDoCreated == true) {
+﻿if (isToDoCreated === "True") {
     alert("ToDo Sucesfully created!");
 }
