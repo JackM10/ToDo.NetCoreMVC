@@ -39,6 +39,7 @@ namespace ToDoNetCore
             app.UseStaticFiles();
             app.Run(async (context) =>
             {
+                //await context.Response.Redirect("/IE_PageNotFound/dnserror[1].html", false);
                 await context.Response.WriteAsync("app.UseMVC skipped - wrong controller selected!");
             });
 
