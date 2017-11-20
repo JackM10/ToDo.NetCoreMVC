@@ -43,7 +43,7 @@ namespace ToDoNetCore
             });
 
             app.UseResponseCompression();
-            loggerFactory.AddFile("ToDo_{Date}.txt");
+            //loggerFactory.AddFile("ToDo_{Date}.txt");
         }
     }
 }

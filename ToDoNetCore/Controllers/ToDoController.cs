@@ -45,9 +45,9 @@ namespace ToDoNetCore.Controllers
             return View(await _context.ToDo.ToListAsync());
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
@@ -61,7 +61,7 @@ namespace ToDoNetCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int entityId, [Bind("entityId")] ToDoModel editedToDo)
+        public async Task<IActionResult> Edit(int entityId, ToDoModel editedToDo)
         {
             if (entityId != editedToDo.TaskId)
             {
