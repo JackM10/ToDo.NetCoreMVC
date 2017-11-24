@@ -61,9 +61,9 @@ namespace ToDoNetCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int entityId, ToDoModel editedToDo)
+        public async Task<IActionResult> Edit(int TaskId, ToDoModel editedToDo)
         {
-            if (entityId != editedToDo.TaskId)
+            if (TaskId != editedToDo.TaskId)
             {
                 return NotFound();
             }
