@@ -91,17 +91,6 @@ namespace ToDoNetCore.Controllers
             }
 
             return View(editedToDo);
-
-            //if (editedToDo.ShortName != null && editedToDo.Description != null)
-            //{
-            //    var toDoEntityToReplace = await _context.ToDo.SingleOrDefaultAsync(p => p.TaskId == entityId);
-            //    toDoEntityToReplace.ShortName = editedToDo.ShortName;
-            //    toDoEntityToReplace.Description = editedToDo.Description;
-            //    return RedirectToAction("List");
-            //}
-            //ModelState.ClearValidationState("ShortName");
-            //ModelState.ClearValidationState("Description");
-            //return View(ToDoList[entityId]);
         }
 
         private bool ToDoExist(int taskId)
@@ -122,6 +111,15 @@ namespace ToDoNetCore.Controllers
 
             return RedirectToAction(nameof(List));
         }
+
+
+
+        ////ToDo - peredelat' huynu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //public IActionResult New(int id)
+        //{
+        //    ToDoModel newToDo = new ToDoModel();
+        //    return View(newToDo);
+        //}
 
         public async Task<IActionResult> New([Bind("ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
