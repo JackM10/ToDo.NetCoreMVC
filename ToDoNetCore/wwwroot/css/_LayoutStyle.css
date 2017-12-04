@@ -8,13 +8,14 @@
 	margin-top: 6px;
 }
 
-.tooltip {
+.todo-tooltip
+{
 	-webkit-box-shadow: 2px 2px 3px black;
 	box-shadow: 2px 2px 3px black;
-
 	background-color: whitesmoke;
 	border: solid black 1px;
 	padding: 5px;
+	z-index: 1050;
 	font: bold 10pt sans-serif;
 }
 

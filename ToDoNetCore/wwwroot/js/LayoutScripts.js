@@ -29,9 +29,10 @@
         }
 	};
 
+    
 	//request tooltip:
-	changeDayNightMode.onmousemove = mouseMoveUnderChangeDayModeBtnHandler;
-    changeDayNightMode.onmouseout = mouseOutFromChangeDayModeBtnHandler;
+	changeDayNightMode.addEventListener("mousemove", mouseMoveUnderChangeDayModeBtnHandler, false);
+	changeDayNightMode.addEventListener("mouseleave", mouseOutFromChangeDayModeBtnHandler, false);
 };
 
 function $(elementId) {
@@ -43,7 +44,7 @@ function Tooltip() {
     this.tooltip = document.createElement("div");
     this.tooltip.style.position = "absolute";
     this.tooltip.style.visibility = "hidden";
-    this.tooltip.className = "tooltip";
+    this.tooltip.className = "todo-tooltip";
 }
 
 Tooltip.prototype.show = function (text, x, y) {
