@@ -45,10 +45,25 @@ namespace ToDoNetCore.Controllers
             return View(await _context.ToDo.ToListAsync());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(int entityId, [Bind("entityId")] ToDoModel editedToDo)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (entityId != editedToDo.TaskId)
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var todo = await _context.ToDo.SingleOrDefaultAsync(m => m.TaskId == id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            return View(todo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int TaskId, ToDoModel editedToDo)
+        {
+            if (TaskId != editedToDo.TaskId)
             {
                 return NotFound();
             }
@@ -76,17 +91,6 @@ namespace ToDoNetCore.Controllers
             }
 
             return View(editedToDo);
-
-            //if (editedToDo.ShortName != null && editedToDo.Description != null)
-            //{
-            //    var toDoEntityToReplace = await _context.ToDo.SingleOrDefaultAsync(p => p.TaskId == entityId);
-            //    toDoEntityToReplace.ShortName = editedToDo.ShortName;
-            //    toDoEntityToReplace.Description = editedToDo.Description;
-            //    return RedirectToAction("List");
-            //}
-            //ModelState.ClearValidationState("ShortName");
-            //ModelState.ClearValidationState("Description");
-            //return View(ToDoList[entityId]);
         }
 
         private bool ToDoExist(int taskId)
@@ -107,6 +111,15 @@ namespace ToDoNetCore.Controllers
 
             return RedirectToAction(nameof(List));
         }
+
+
+
+        ////ToDo - peredelat' huynu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //public IActionResult New(int id)
+        //{
+        //    ToDoModel newToDo = new ToDoModel();
+        //    return View(newToDo);
+        //}
 
         public async Task<IActionResult> New([Bind("ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {

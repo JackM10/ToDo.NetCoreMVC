@@ -4,9 +4,11 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - My ASP.NET Application</title>
+	<link href="~/css/_LayoutStyle.css" rel="stylesheet" type="text/css"/>
 	<link rel="stylesheet" href="~/css/ViewOneItem.css" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
+	<script src="js/LayoutScripts.js"></script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -24,12 +26,31 @@
 				<li>@Html.ActionLink("Create new ToDo", "New", "ToDo")</li>
 				<li>@Html.ActionLink("ClientCached", "ClientCached", "ToDo")</li>
 				<li>@Html.ActionLink("ServerCached", "ServerCached", "MemoryCache")</li>
+				@*<li>
+					<div class="toggle-mode">
+						<div class="icon">
+							<i class="fa fa-sun-o" aria-hidden="true"></i>
+						</div>
+						<div class="toggle-switch">
+							<label class="switch">
+								<input type="checkbox" id="switch-style">
+								<div class="slider round"></div>
+							</label>
+						</div>
+						<div class="icon">
+							<i class="fa fa-moon-o" aria-hidden="true"></i>
+						</div>
+					</div>
+				</li>*@
 			</ul>
+			<button class="btn btn-info" id="changeDayNightModeBtn">Day \ Night</button>
 		</div>
 	</div>
 </div>
 <div class="container body-content">
 	<p>
+		<br/>
+		<br/>
 		@RenderBody()
 	</p>
 		<hr/>
