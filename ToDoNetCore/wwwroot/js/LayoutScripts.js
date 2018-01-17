@@ -1,7 +1,7 @@
 ﻿window.onload = function () {
 
 	//Day-Night mode control:
-    var changeDayNightMode = $('changeDayNightModeBtn');
+    var changeDayNightMode = GetDocumentElementByID('changeDayNightModeBtn');
 	var isDayModeSelected;
 
 	if (window.localStorage.isDayModeSelected) {
@@ -16,7 +16,7 @@
         isDayModeSelected = true;
     }
 
-    changeDayNightMode.onclick = function() {
+    changeDayNightMode.onclick = () => {
         if (isDayModeSelected) {
             document.body.style.backgroundColor = "grey";
 			isDayModeSelected = false;
@@ -35,7 +35,7 @@
 	changeDayNightMode.addEventListener("mouseleave", mouseOutFromChangeDayModeBtnHandler, false);
 };
 
-function $(elementId) {
+function GetDocumentElementByID(elementId) {
     return document.getElementById(elementId);
 }
 
@@ -53,7 +53,7 @@ Tooltip.prototype.show = function (text, x, y) {
     this.tooltip.style.top = y + "px";
     this.tooltip.style.visibility = "visible";
 
-    if (this.tooltip.parentNode != document.body) {
+    if (this.tooltip.parentNode !== document.body) {
         document.body.appendChild(this.tooltip);
     }
 };
@@ -71,23 +71,4 @@ function mouseMoveUnderChangeDayModeBtnHandler(e) {
 
 function mouseOutFromChangeDayModeBtnHandler() {
     tooltipInstance.hide();
-}
-
-function findCookieValue(cookieName) {
-	var allCookies = document.cookie;
-	var pos = allCookies.indexOf(cookieName + "=");
-
-	//If cookie exists, extract it's value:
-    if (pos != -1) {
-		var start = pos + cookieName.length + 1;
-		var end = allCookies.indexOf(";", start);
-
-        if (end == -1) {
-            end = allCookies.length;
-		}
-
-		var value = allCookies.substring(start, end);
-
-        return value;
-    }
 }

@@ -5,14 +5,15 @@
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
-	<meta name="viewport" content="width-device-width"/>
+	<meta name="viewport" content="width-device-width" />
 	<title>.NET Core MVC - Main</title>
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
+	<script src="~/js/jquery-1.11.3.min.js"></script>
+	<script src="~/js/jquery-ui.min.js"></script>
 	<script>
 		var isToDoCreated = '@TempData["ToDoIsCreated"]';
 	</script>
@@ -45,19 +46,17 @@
 			@foreach (var todo in Model)
 			{
 				<p>
-					<a class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
-					<a class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
-					<a class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
+					<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
+					<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
+					<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
 				</p>
 			}
 		</td>
 	</tr>
 	</tbody>
 </table>
-	
 <p>
-	<a class="btn btn-success" href="@Url.Action("New", "ToDo" )" role="button">Create New</a>
+	<a class="btn btn-success" asp-action="New">Create New</a>
 </p>
-
 </body>
 </html>

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
-//using System.Web.Caching;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -111,16 +110,14 @@ namespace ToDoNetCore.Controllers
 
             return RedirectToAction(nameof(List));
         }
+        
+        public IActionResult New()
+        {
+             return View();
+        }
 
-
-
-        ////ToDo - peredelat' huynu!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //public IActionResult New(int id)
-        //{
-        //    ToDoModel newToDo = new ToDoModel();
-        //    return View(newToDo);
-        //}
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> New([Bind("ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
             if (!ModelState.IsValid)
