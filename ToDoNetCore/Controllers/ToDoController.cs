@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -175,6 +176,21 @@ namespace ToDoNetCore.Controllers
         }
 
         #endregion
+
+        #region Handling Http Errors
+
+        public IActionResult Errors(string errorCode)
+        {
+            if (errorCode == "404" | errorCode == "500")
+            {
+                return View($"~/Views/ToDo/dnserror[1].html");
+            }
+
+            return View($"~/Views/ToDo/dnserror[1].html");
+            //return View(HttpContext.Response.WriteAsync("test"));
+        }
+
+            #endregion
 
         #region Helpers
 

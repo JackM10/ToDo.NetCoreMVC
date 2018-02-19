@@ -7,7 +7,7 @@ $(window).load(function () {
 	button.on("click",
 		function () {
 			//alert("tst");
-			$.ajax('additionalDetails.html',
+			$.ajax('http://localhost:56275/ToDo/additionalDetails.html',
 				{
 					success: function(response) {
 						button.html(response).slideDown();

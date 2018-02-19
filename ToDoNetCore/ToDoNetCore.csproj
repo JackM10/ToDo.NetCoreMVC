@@ -5,18 +5,18 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="bootstrap" Version="4.0.0-beta3" />
-    <PackageReference Include="jQuery" Version="3.2.1" />
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="bootstrap" Version="4.0.0" />
+    <PackageReference Include="jQuery" Version="3.3.1" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="Node.js" Version="5.3.0" />
     <PackageReference Include="React.AspNet" Version="3.2.0" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00023" />
-    <PackageReference Include="ZNetCS.AspNetCore.Compression" Version="2.0.1" />
+    <PackageReference Include="ZNetCS.AspNetCore.Compression" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\Files\" />
