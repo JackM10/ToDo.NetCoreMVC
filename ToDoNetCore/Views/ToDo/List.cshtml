@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.List<ToDoNetCore.Models.ToDoModel>
+﻿@model List<ToDoNetCore.Models.ToDoModel>
 
 @{
 	Layout = "_Layout";
@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width-device-width" />
+	<meta name="viewport" content="width=device-width" />
 	<title>.NET Core MVC - Main</title>
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
@@ -29,7 +29,21 @@
 	</tr>
 	</thead>
 	<tbody>
-	<tr>
+		<th scope="row">
+			@foreach (var todo in Model)
+	{
+<tr>
+			<td>@todo.ShortName</td>
+			<td>@todo.Description</td>
+			<td>
+				<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new {id = todo.TaskId})" role="button">View</a>
+				<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
+				<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
+			</td>
+		</tr>
+	}
+		</th>
+	@*<tr>
 		<th scope="row">
 			@foreach (var todo in Model)
 			{
@@ -52,7 +66,7 @@
 				</p>
 			}
 		</td>
-	</tr>
+	</tr>*@
 	</tbody>
 </table>
 <p>

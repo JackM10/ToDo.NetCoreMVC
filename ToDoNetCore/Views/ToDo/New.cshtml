@@ -1,5 +1,4 @@
-﻿@using ToDoNetCore.Models
-@model ToDoNetCore.Models.ToDoModel
+﻿@model ToDoNetCore.Models.ToDoModel
 
 @{
 	ViewBag.Title = "Create New ToDo";
@@ -12,42 +11,39 @@
 <html>
 
 <head>
-	<meta name="viewport" content="width-device-width" />
+	<meta name="viewport" content="width=device-width" />
 	<title>.NET Core MVC - New</title>
-	<link rel="stylesheet" href="~/css/site.css" />
+	<link href="~/css/site.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
 	<script src="~/js/jquery-1.11.3.min.js"></script>
 	<script src="~/js/jquery.validate.min.js"></script>
 	<script src="~/js/jquery.validate.unobtrusive.min.js"></script>
-	<script type="text/javascript" src="~/js/bootstrap-filestyle.min.js"> </script>
+	<script type="text/javascript" src="~/js/bootstrap-filestyle.min.js"></script>
 	<script src="~/js/NewToDoCustomScript.js"></script>
-	
+
 	<style>
-		.mouseOverAndLeave {
-			padding: 1px 0px;
-			margin: 1px 0px;
+		.mouseOverAndLeave  {
+			padding: 1px 0px;
+			margin: 1px 0px;
 		}
+
 		.mouseOverAndLeave:hover  {
 			background-color: red;
 		}
-
 	</style>
 	<script>
-		function onMouseOver(placeholder)
-		{
-			$(placeholder).css("background", "#e6f2ff");
+		function  onMouseOver(placeholder) {
+			$(placeholder).css("background",  "#e6f2ff");
 		}
- 
-		function onMouseLeave(placeholder)
-		{
-			$(placeholder).css("background", "");
+
+		function  onMouseLeave(placeholder) {
+			$(placeholder).css("background",  "");
 		}
- 
-		$(function ()
-		{
-			$(".mouseOverAndLeave").mouseover(function () { onMouseOver(this); })
-			$(".mouseOverAndLeave").mouseleave(function () { onMouseLeave(this); })
+
+		$(function  () {
+			$(".mouseOverAndLeave").mouseover(function  ()  {  onMouseOver(this);  })
+			$(".mouseOverAndLeave").mouseleave(function  ()  {  onMouseLeave(this);  })
 		})
 	</script>
 </head>

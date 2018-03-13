@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoNetCore", "ToDoNetCore\ToDoNetCore.csproj", "{200E7936-9524-4E0F-BDF8-A3357BB55024}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoNetCore.Tests", "ToDoNetCore.Tests\ToDoNetCore.Tests.csproj", "{71D467E9-5790-456F-B38E-F213ABDBF1BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{200E7936-9524-4E0F-BDF8-A3357BB55024}.Release|Any CPU.Build.0 = Release|Any CPU
 		{200E7936-9524-4E0F-BDF8-A3357BB55024}.Release|x64.ActiveCfg = Release|x64
 		{200E7936-9524-4E0F-BDF8-A3357BB55024}.Release|x64.Build.0 = Release|x64
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{71D467E9-5790-456F-B38E-F213ABDBF1BC}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

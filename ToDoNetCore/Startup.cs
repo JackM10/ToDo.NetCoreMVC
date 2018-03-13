@@ -34,18 +34,28 @@ namespace ToDoNetCore
 
             app.UseMvc(controller =>
             {
-                controller.MapRoute("default", "{controller}/{action}/{id?}",
-                    new {controller = "ToDo", action = "List"}); controller.MapRoute("view", "{id:int}", new { controller = "ToDo", action = "ViewOneItem" }); });
-            app.UseStaticFiles();
-            //app.Run(async (context) =>
-            //{
-            //    //await context.Response.Redirect("/IE_PageNotFound/dnserror[1].html", false);
-            //    await context.Response.WriteAsync("app.UseMVC skipped - wrong controller selected!");
-            //});
+                controller.MapRoute(
+                    "ViewOneToDo",
+                    "ToDos/ID-{id:int}",
+                    new {controller = "ToDo", action = "ViewOneItem"});
 
-            app.UseStatusCodePagesWithReExecute("/ToDo/Errors/{0}");
+                controller.MapRoute(
+                    "default", 
+                    "{controller}/{action}/{id?}",
+                    new {controller = "ToDo", action = "List"});
+
+                //controller.MapRoute(
+                //    "CatchError",
+                //    "Errors{errorCode}",
+                //    new { controller = "ToDo", action = "Errors" });
+            });
+
+            app.UseStaticFiles();
+
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
 
             app.UseResponseCompression();
+
             //loggerFactory.AddFile("ToDo_{Date}.txt");
         }
     }

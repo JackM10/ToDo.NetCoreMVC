@@ -40,11 +40,8 @@ namespace ToDoNetCore.Controllers
 
         #region Action Methods
 
-        public async Task<IActionResult> List()
-        {
-            return View(await _context.ToDo.ToListAsync());
-        }
-
+        public async Task<IActionResult> List() => View(await _context.ToDo.ToListAsync());
+        
         public async Task<IActionResult> Edit(int id)
         {
             if (id == 0)
@@ -112,10 +109,7 @@ namespace ToDoNetCore.Controllers
             return RedirectToAction(nameof(List));
         }
         
-        public IActionResult New()
-        {
-             return View();
-        }
+        public ViewResult New() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -190,7 +184,7 @@ namespace ToDoNetCore.Controllers
             //return View(HttpContext.Response.WriteAsync("test"));
         }
 
-            #endregion
+        #endregion
 
         #region Helpers
 
