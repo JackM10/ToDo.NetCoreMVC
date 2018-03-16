@@ -9,20 +9,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ToDoNetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ToDoNetCore.Controllers;
 
 namespace ToDoNetCore
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IHostingEnvironment env) => Configuration = (new ConfigurationBuilder()
+        .SetBasePath(env.ContentRootPath)
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+        .AddEnvironmentVariables()).Build();
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddResponseCompression();
-
-            var connection =
-                @"Server=(localdb)\MSSQLLocalDB;Database=ToDoNetCore;Trusted_Connection=True;";
-            services.AddDbContext<ToDoContext>(options => options.UseSqlServer(connection));
+            services.AddTransient<IToDoRepository, EFToDoRepository>();
+            services.AddDbContext<ToDoContext>(options => 
+                options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

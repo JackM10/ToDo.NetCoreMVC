@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -21,7 +22,7 @@ namespace ToDoNetCore.Controllers
     {
         #region Fields
 
-        private readonly ToDoContext _context;
+        private IToDoRepository _context;
         private IHostingEnvironment _appEnvironment;
         private readonly ILogger<ToDoController> _log;
 
@@ -29,7 +30,7 @@ namespace ToDoNetCore.Controllers
 
         #region Constructors
 
-        public ToDoController(ToDoContext context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log)
+        public ToDoController(IToDoRepository context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log)
         {
             _context = context;
             _appEnvironment = appEnvironment;
@@ -69,8 +70,7 @@ namespace ToDoNetCore.Controllers
             {
                 try
                 {
-                    _context.Update(editedToDo);
-                    await _context.SaveChangesAsync();
+                    await _context.Update(editedToDo);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -102,9 +102,8 @@ namespace ToDoNetCore.Controllers
                 return NotFound();
             }
 
-            var todo = await _context.ToDo.SingleOrDefaultAsync(m => m.ShortName == entityNameToRemove);
-            _context.ToDo.Remove(todo);
-            await _context.SaveChangesAsync();
+            var todo = await _context.FindToDoInRepository(entityNameToRemove);
+            await _context.Remove(todo);
 
             return RedirectToAction(nameof(List));
         }
@@ -120,21 +119,21 @@ namespace ToDoNetCore.Controllers
                 return View(tdModel);
             }
 
-            _context.Add(tdModel);
+            await _context.Add(tdModel);
 
             if (uploadedFile != null)
             {
-                string path = "/Files/" + uploadedFile.FileName;
-                using (var filestraem = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(filestraem);
-                }
-                FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
-                _context.File.Add(file);
-                _context.SaveChanges();
+                //ToDo: After using of IToDoRepo interface it's required to rebuild file upload functionality
+                //string path = "/Files/" + uploadedFile.FileName;
+                //using (var filestraem = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                //{
+                //    await uploadedFile.CopyToAsync(filestraem);
+                //}
+                //FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
+                //_context.File.Add(file);
+                //_context.SaveChanges();
             }
-            await _context.SaveChangesAsync();
-            TempData["ToDoIsCreated"] = true;
+            TempData["ToDoIsCreated"] = "ToDo Sucesfully created!";
             return RedirectToAction(nameof(List));
         }
 
@@ -165,7 +164,7 @@ namespace ToDoNetCore.Controllers
         public IActionResult ClientCached()
         {
             _log.LogInformation("hit!");
-            ViewBag.CachedTime = DateTime.Now.ToString();
+            ViewBag.CachedTime = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             return View();
         }
 
@@ -181,7 +180,6 @@ namespace ToDoNetCore.Controllers
             }
 
             return View($"~/Views/ToDo/dnserror[1].html");
-            //return View(HttpContext.Response.WriteAsync("test"));
         }
 
         #endregion
