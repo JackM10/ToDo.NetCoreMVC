@@ -1,0 +1,9 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "tether": "v1.4.3",
+    "bootstrap-min-only": "v3.3.5",
+    "jquery-validation": "1.16.0"
+  }
+}

@@ -179,7 +179,7 @@ namespace ToDoNetCore.Controllers
                 return View($"~/Views/ToDo/dnserror[1].html");
             }
 
-            return View($"~/Views/ToDo/dnserror[1].html");
+            return View($"~/StaticPages/IE_PageNotFound/dnserror.html");
         }
 
         #endregion
