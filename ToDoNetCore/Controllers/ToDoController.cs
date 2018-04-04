@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -23,6 +24,7 @@ namespace ToDoNetCore.Controllers
         #region Fields
 
         private IToDoRepository _context;
+        private ApplicationUptime appUptime;
         private IHostingEnvironment _appEnvironment;
         private readonly ILogger<ToDoController> _log;
 
@@ -30,18 +32,19 @@ namespace ToDoNetCore.Controllers
 
         #region Constructors
 
-        public ToDoController(IToDoRepository context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log)
+        public ToDoController(IToDoRepository context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log, ApplicationUptime up)
         {
             _context = context;
             _appEnvironment = appEnvironment;
             _log = log;
+            appUptime = up;
         }
 
         #endregion
 
         #region Action Methods
 
-        public async Task<IActionResult> List() => View(await _context.ToDo.ToListAsync());
+        public ViewResult List() => View(_context.ToDo.ToList());
         
         public async Task<IActionResult> Edit(int id)
         {
@@ -163,6 +166,7 @@ namespace ToDoNetCore.Controllers
         // http://www.talkingdotnet.com/response-caching-in-asp-net-core-1-1/
         public IActionResult ClientCached()
         {
+            ViewBag.AppUptime = $"{appUptime.Uptime()}ms";
             _log.LogInformation("hit!");
             ViewBag.CachedTime = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             return View();
@@ -170,7 +174,7 @@ namespace ToDoNetCore.Controllers
 
         #endregion
 
-        #region Handling Http Errors
+        #region Exception Handling
 
         public IActionResult Errors(string errorCode)
         {

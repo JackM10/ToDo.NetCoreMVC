@@ -23,17 +23,12 @@ namespace ToDoNetCore
 
             host.Run();
         }
-
-        // Only used by EF Tooling
+        
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder()
-                .ConfigureAppConfiguration((ctx, cfg) =>
-                {
-                    cfg.SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("config.json", true) // require the json file!
-                        .AddEnvironmentVariables();
-                })
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureLogging((ctx, logging) => { }) // No logging
                 .UseStartup<Startup>()
                 .UseSetting("DesignTime", "true")

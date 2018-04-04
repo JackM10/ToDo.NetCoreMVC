@@ -1,4 +1,4 @@
-﻿@model List<ToDoNetCore.Models.ToDoModel>
+﻿@model List<ToDoModel>
 
 @{
 	Layout = "_Layout";
@@ -21,57 +21,57 @@
 	<script src="js/ListPageCustomScripts.js"></script>
 </head>
 <body>
-<table class="table">
-	<thead>
-	<tr>
-		<th>Name</th>
-		<th>Description</th>
-		<th>Action</th>
-	</tr>
-	</thead>
-	<tbody>
-		<th scope="row">
-			@foreach (var todo in Model)
-	{
-<tr>
-			<td>@todo.ShortName</td>
-			<td>@todo.Description</td>
-			<td>
-				<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new {id = todo.TaskId})" role="button">View</a>
-				<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
-				<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
-			</td>
-		</tr>
-	}
-		</th>
-	@*<tr>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody id="bodyOfTheList">
 		<th scope="row">
 			@foreach (var todo in Model)
 			{
-				<p>@todo.ShortName</p>
-			}
-		</th>
-		<td>
-			@foreach (var todo in Model)
-			{
-				<p>@todo.Description</p>
-			}
-		</td>
-		<td>
-			@foreach (var todo in Model)
-			{
-				<p>
-					<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
+			<tr>
+				<td>@todo.ShortName</td>
+				<td>@todo.Description</td>
+				<td>
+					<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new {id = todo.TaskId})" role="button">View</a>
 					<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
 					<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
-				</p>
-			}
-		</td>
-	</tr>*@
-	</tbody>
-</table>
-<p>
-	<a class="btn btn-success" asp-action="New">Create New</a>
-</p>
-</body>
+				</td>
+			</tr>
+		}
+			</th>
+			@*<tr>
+					<th scope="row">
+						@foreach (var todo in Model)
+						{
+							<p>@todo.ShortName</p>
+						}
+					</th>
+					<td>
+						@foreach (var todo in Model)
+						{
+							<p>@todo.Description</p>
+						}
+					</td>
+					<td>
+						@foreach (var todo in Model)
+						{
+							<p>
+								<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
+								<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
+								<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
+							</p>
+						}
+					</td>
+				</tr>*@
+			</tbody>
+		</table>
+		<p>
+			<a class="btn btn-success" asp-action="New">Create New</a>
+		</p>
+	</body>
 </html>

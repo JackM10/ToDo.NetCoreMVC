@@ -4,8 +4,8 @@
 }
 
 #changeDayNightModeBtn {
-	margin-left: 23%;
-	margin-top: 6px;
+	float: right;
+	margin-top: 7px;
 }
 
 .todo-tooltip

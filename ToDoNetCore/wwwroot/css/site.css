@@ -6,6 +6,7 @@
 .table {
 	width: auto;
 	background: #008b8b;
+	user-select: none;
 }
 
 .btn-link{

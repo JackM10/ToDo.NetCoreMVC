@@ -11,6 +11,7 @@ using ToDoNetCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ToDoNetCore.Controllers;
+using ToDoNetCore.Infrastructure;
 
 namespace ToDoNetCore
 {
@@ -19,11 +20,10 @@ namespace ToDoNetCore
         public IConfiguration Configuration { get; }
 
         public Startup(IHostingEnvironment env) => Configuration = (new ConfigurationBuilder()
-        .SetBasePath(env.ContentRootPath)
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-        .AddEnvironmentVariables()).Build();
-        
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+            .AddEnvironmentVariables()).Build();
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -31,6 +31,7 @@ namespace ToDoNetCore
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
                 options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
+            services.AddSingleton<ApplicationUptime>();
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -39,6 +40,16 @@ namespace ToDoNetCore
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            if (env.IsProduction())
+            {
+                loggerFactory.AddFile("ToDo_{Date}.txt");
+            }
+
+            app.UseStaticFiles();
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+            app.UseMiddleware<StatusCodeHandlingMiddleware>();
+            app.UseResponseCompression();
 
             app.UseMvc(controller =>
             {
@@ -51,20 +62,7 @@ namespace ToDoNetCore
                     "default", 
                     "{controller}/{action}/{id?}",
                     new {controller = "ToDo", action = "List"});
-
-                //controller.MapRoute(
-                //    "CatchError",
-                //    "Errors{errorCode}",
-                //    new { controller = "ToDo", action = "Errors" });
             });
-
-            app.UseStaticFiles();
-
-            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
-
-            app.UseResponseCompression();
-
-            //loggerFactory.AddFile("ToDo_{Date}.txt");
         }
     }
 }
