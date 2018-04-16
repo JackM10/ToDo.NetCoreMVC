@@ -3,5 +3,9 @@
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>
     <NameOfLastUsedPublishProfile>CustomProfile3</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

@@ -12,12 +12,14 @@ namespace ToDoNetCore.Models
     {
         [Key]
         public int TaskId { get; set; }
-        [StringLength(60, MinimumLength = 5)]
         [Required]
+        [FromForm]
+        [StringLength(60, MinimumLength = 5)]
         [Remote(action: "IsToDoExists", controller: "ToDo")]
         public string ShortName { get; set; }
-        [StringLength(60, MinimumLength = 5)]
         [Required]
+        [FromForm]
+        [StringLength(60, MinimumLength = 5)]
         public string Description { get; set; }
     }
 

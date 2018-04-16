@@ -12,13 +12,24 @@
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
-	<script src="~/js/jquery-1.11.3.min.js"></script>
-	<script src="~/js/jquery-ui.min.js"></script>
+	<environment names="development">
+		<script asp-src-include="/lib/jquery-ui/**/j*.js"
+		        asp-src-exclude="**.min.**,**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="js/ListPageCustomScripts.js"
+		        asp-append-version="true"></script>
+	</environment>
+	<environment names="production,staging">
+		<script asp-src-include="/lib/jquery-ui/**/j*.min.js"
+		        asp-src-exclude="**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="js/ListPageCustomScripts.js"
+		        asp-append-version="true"></script>
+	</environment>
 	@if (TempData["ToDoIsCreated"] != null)
 	{
 		<div class="alert alert-success" id="toDoSuccessCreatedAlert">@TempData["ToDoIsCreated"]</div>
 	}
-	<script src="js/ListPageCustomScripts.js"></script>
 </head>
 <body>
 	<table class="table">

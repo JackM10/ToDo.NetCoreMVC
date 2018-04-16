@@ -16,40 +16,31 @@
 	<link href="~/css/site.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-	<script src="~/js/jquery.validate.unobtrusive.min.js"></script>
-	<script type="text/javascript" src="~/js/bootstrap-filestyle.min.js"></script>
-	<script src="~/js/NewToDoCustomScript.js"></script>
-
-	<style>
-		.mouseOverAndLeave  {
-			padding: 1px 0px;
-			margin: 1px 0px;
-		}
-
-		.mouseOverAndLeave:hover  {
-			background-color: red;
-		}
-	</style>
-	<script>
-		function onMouseOver(placeholder) {
-			$(placeholder).css("background", "#e6f2ff");
-		}
-
-		function onMouseLeave(placeholder) {
-			$(placeholder).css("background", "");
-		}
-
-		$(function () {
-			$(".mouseOverAndLeave").mouseover(function () { onMouseOver(this); })
-			$(".mouseOverAndLeave").mouseleave(function () { onMouseLeave(this); })
-		})
-	</script>
+	<link href="~/css/NewOrEditToDo.css" rel="stylesheet" />
+	<environment names="development">
+		<script asp-src-include="/lib/jquery-validation/dist/**/*.js"
+		        asp-src-exclude="**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="/lib/jquery/dist/**/j*.js"
+		        asp-src-exclude="**.min.**,**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="~/js/NewAndEditToDoCustomScript.js"
+		        asp-append-version="true"></script>
+	</environment>
+	<environment names="production, staging">
+		<script asp-src-include="/lib/jquery-validation/dist/**/*.min.js"
+		        asp-src-exclude="**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="/lib/jquery/dist/**/j*.min.js"
+		        asp-src-exclude="**.slin.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="~/js/NewAndEditToDoCustomScript.js"
+		        asp-append-version="true"></script>
+	</environment>
 </head>
 <body>
 <div>
-	<form asp-action="New">
+	<form asp-action="New" novalidate>
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="form-group">
@@ -67,12 +58,11 @@
 					<span asp-validation-for="Description" class="text-danger"></span>
 				</div>
 			</p>
-		<p>
+		@*<p>
 			<input asp-action="New" asp-controller="ToDo" method="post" />
 			<input type="file" name="uploadedFile"/> <br>
 			<input type="submit" value="Upload"/>
-			
-		</p>
+		</p>*@
 			</div>
 		</div>
 		<p>

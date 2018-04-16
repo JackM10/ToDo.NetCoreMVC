@@ -1,15 +1,34 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<ApplicationConfigurations> FooterMessage
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - My ASP.NET Application</title>
-	<link href="~/css/_LayoutStyle.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="~/css/ViewOneItem.css" />
-	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
-	<script src="~/js/jquery-1.11.3.min.js"></script>
-	<script src="js/LayoutScripts.js"></script>
+	<environment names="development">
+		<link rel="stylesheet"
+		      asp-href-include="~/css/bootstrap.min.css"/>
+		<link rel="stylesheet" 
+		      asp-href-include="~/css/_LayoutStyle.css"/>
+		<script asp-src-include="/lib/bootstrap/dist/**/*.js"
+				asp-src-exclude="**.min.**,**.slim.**"
+				asp-append-version="true"></script>
+		<script asp-src-include="/lib/jquery/dist/**/j*.js"
+				asp-src-exclude="**.min.**,**.slim.**"
+				asp-append-version="true"></script>
+		<script asp-src-include="js/LayoutScripts.js"
+				asp-append-version="true"></script>
+	</environment>
+	<environment names="production, staging">
+		<script asp-src-include="/lib/bootstrap/dist/**/*.min.js"
+		        asp-src-exclude="**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="/lib/jquery/dist/**/*.min.js"
+		        asp-src-exclude="**.slim.**"
+		        asp-append-version="true"></script>
+		<script asp-src-include="js/LayoutScripts.js"
+		        asp-append-version="true"></script>
+	</environment>
 	<script language="javascript" type="text/javascript">
 		function filter(element) {
 			var value = $(element).val().toLowerCase();
@@ -41,16 +60,19 @@
 				<li>@Html.ActionLink("Create new ToDo", "New", "ToDo")</li>
 				<li>@Html.ActionLink("ClientCached", "ClientCached", "ToDo")</li>
 				<li>@Html.ActionLink("ServerCached", "ServerCached", "MemoryCache")</li>
-				<form class="navbar-form navbar-left">
-					<div class="input-group">
-						<input type="text" class="form-control" onkeyup="filter(this)"  placeholder="Search">
-						<div class="input-group-btn">
-							<button class="btn btn-default" type="submit">
-								<i class="glyphicon glyphicon-search"></i>
-							</button>
+				@if (ViewContext.RouteData.Values["action"] == "List")
+				{
+					<form class="navbar-form navbar-left">
+						<div class="input-group">
+							<input type="text" class="form-control" onkeyup="filter(this)" placeholder="Search">
+							<div class="input-group-btn">
+								<button class="btn btn-default" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
 						</div>
-					</div>
-				</form>
+					</form>
+				}
 			</ul>
 			<button class="btn btn-info" id="changeDayNightModeBtn">Day \ Night</button>
 		</div>
@@ -64,7 +86,7 @@
 	</p>
 		<hr/>
 	<footer>
-		<p>&copy; @DateTime.Now.Year - All Rights reserverd, ToDo app</p>
+		<p>&copy; @DateTime.Now.Year - @FooterMessage.Value.FooterMessage</p>
 	</footer>
 </div>
 

@@ -17,12 +17,19 @@ namespace ToDoNetCore
 {
     public class Startup
     {
+        public AppSettings AppSettings { get; set; }
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env) => Configuration = (new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
-            .AddEnvironmentVariables()).Build();
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        {
+            Configuration = (new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables()).Build();
+            AppSettings = configuration.Get<AppSettings>();
+        }
+
+
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -32,6 +39,7 @@ namespace ToDoNetCore
             services.AddDbContext<ToDoContext>(options => 
                 options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
             services.AddSingleton<ApplicationUptime>();
+            services.Configure<ApplicationConfigurations>(Configuration.GetSection("ApplicationConfigurations"));
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
