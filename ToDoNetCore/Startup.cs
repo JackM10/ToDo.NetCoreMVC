@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ToDoNetCore.Models;
@@ -29,8 +30,6 @@ namespace ToDoNetCore
             AppSettings = configuration.Get<AppSettings>();
         }
 
-
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -38,8 +37,23 @@ namespace ToDoNetCore
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
                 options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
             services.AddSingleton<ApplicationUptime>();
             services.Configure<ApplicationConfigurations>(Configuration.GetSection("ApplicationConfigurations"));
+            services.AddIdentity<AppUser, IdentityRole>(opts =>
+                {
+                    opts.User.RequireUniqueEmail = true;
+                    opts.Password.RequiredLength = 6;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequireLowercase = false;
+                    opts.Password.RequireUppercase = false;
+                    opts.Password.RequireDigit = false;
+                })
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Account/Login");
+            services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -57,6 +71,7 @@ namespace ToDoNetCore
             app.UseStaticFiles();
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseMiddleware<StatusCodeHandlingMiddleware>();
+            app.UseAuthentication();
             app.UseResponseCompression();
 
             app.UseMvc(controller =>

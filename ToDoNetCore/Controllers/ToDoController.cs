@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
@@ -46,6 +47,7 @@ namespace ToDoNetCore.Controllers
 
         public ViewResult List() => View(_context.ToDo.ToList());
         
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             if (id == 0)
@@ -62,6 +64,7 @@ namespace ToDoNetCore.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(int TaskId, ToDoModel editedToDo)
         {
             if (TaskId != editedToDo.TaskId)
@@ -98,6 +101,7 @@ namespace ToDoNetCore.Controllers
             return _context.ToDo.Any(e => e.TaskId == taskId);
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(string entityNameToRemove)
         {
             if (entityNameToRemove == null)
@@ -172,6 +176,9 @@ namespace ToDoNetCore.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult UserInfo() => View(GetUserData(nameof(UserInfo)));
+
         #endregion
 
         #region Exception Handling
@@ -200,6 +207,16 @@ namespace ToDoNetCore.Controllers
 
             return Json(data: true);
         }
+
+
+        private Dictionary<string, object> GetUserData(string actionName) => new Dictionary<string, object>
+        {
+            ["User"] = HttpContext.User.Identity.Name,
+            ["Authenticated"] = HttpContext.User.Identity.IsAuthenticated,
+            ["Auth Type"] = HttpContext.User.Identity.AuthenticationType,
+            ["In Jack Role"] = HttpContext.User.IsInRole("JackRole")
+        };
+        
 
         #endregion
     }

@@ -17,13 +17,27 @@
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
 	<link href="~/css/NewOrEditToDo.css" rel="stylesheet" />
+	<script>
+		function submit() {
+			var submitButton = $('submitButton');
+			submitButton.click(function() {
+				setTimeout(function() { submitButton.addClass('is-loading'); }, 3000);
+				document.getElementById("new-todo-form").submit();
+			});
+		}
+
+		//var submitButton = $('submitButton');
+		//submitButton.click(function() {
+		//	setTimeout(function() { submitButton.addClass('is-loading'); }, 3000);
+		//	document.getElementById("new-todo-form").submit();
+		//});
+	</script>
 	<environment names="development">
-		<script asp-src-include="/lib/jquery-validation/dist/**/*.js"
-		        asp-src-exclude="**.slim.**"
+		<script asp-src-include="~/lib/jquery/dist/jquery.js"
 		        asp-append-version="true"></script>
-		<script asp-src-include="/lib/jquery/dist/**/j*.js"
+		@*<script asp-src-include="/lib/jquery/dist/**/j*.js"
 		        asp-src-exclude="**.min.**,**.slim.**"
-		        asp-append-version="true"></script>
+		        asp-append-version="true"></script>*@
 		<script asp-src-include="~/js/NewAndEditToDoCustomScript.js"
 		        asp-append-version="true"></script>
 	</environment>
@@ -40,7 +54,7 @@
 </head>
 <body>
 <div>
-	<form asp-action="New" novalidate>
+	<form asp-action="New" novalidate id="new-todo-form">
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="form-group">
@@ -66,7 +80,7 @@
 			</div>
 		</div>
 		<p>
-			<input type="submit" class="btn btn-primary" role="button" value="Save item"/>
+			<a class="button is-primary is-medium" onclick="submit" id="submitButton">Save item</a>
 			<input type="reset" class="btn btn-danger" value="Clear data" onclick="return confirm('Clear all fields?')" />
 			<a asp-action="List" class="btn btn-success">
 				 <font color="black"><b>< </b></font>Back to List

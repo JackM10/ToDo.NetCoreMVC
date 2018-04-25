@@ -8,8 +8,14 @@
 	margin-top: 7px;
 }
 
-.todo-tooltip
-{
+#adminButton {
+	float: right !important;
+	margin-top: 7px;
+	margin-right: 3px;
+
+}
+
+.todo-tooltip {
 	-webkit-box-shadow: 2px 2px 3px black;
 	box-shadow: 2px 2px 3px black;
 	background-color: whitesmoke;

@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ToDoNetCore.Models
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+	<link rel="stylesheet"
+		  asp-href-include="~/lib/bulma/css/bulma.css" />
+</head>
+<body class="m-1 p-1">
+	<section class="hero is-primary is-medium">
+		<div class="hero-head">
+			<nav class="navbar">
+				<div class="container">
+					<div class="navbar-brand">
+						<a class="navbar-item">
+							<img src="https://bulma.io/images/bulma-type-white.png" alt="Logo">
+						</a>
+						<span class="navbar-burger burger" data-target="navbarMenuHeroA">
+							<span></span>
+							<span></span>
+							<span></span>
+						</span>
+					</div>
+					<div id="navbarMenuHeroA" class="navbar-menu">
+						<div class="navbar-end">
+							<a class="navbar-item is-active" asp-controller="Admin" asp-action="Index">
+								Users
+							</a>
+							<a class="navbar-item" asp-controller="RoleAdmin" asp-action="Index">
+								Roles
+							</a>
+							<a class="navbar-item">
+								Documentation
+							</a>
+							<span class="navbar-item">
+								@if (SignInManager.IsSignedIn(User))
+								{
+									<a class="button is-primary is-inverted" asp-controller="Account" asp-action="Logout">
+										<span class="icon">
+											<i class="fab fa-github"></i>
+										</span>
+										<span>Logout</span>
+									</a>
+								}
+								else
+								{
+									<a class="button is-primary is-inverted" asp-controller="Account" asp-action="Login">
+										<span class="icon">
+											<i class="fab fa-github"></i>
+										</span>
+										<span>Login</span>
+									</a>
+								}
+							</span>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</section>
+	<div>
+		@RenderBody()
+	</div>
+</body>
+</html>
