@@ -6,6 +6,6 @@
 				toDoSuccessCreatedAlert.slideUp(500);
 			});
 	};
-	$('tr').sortable();
+	//$('tr').sortable();
 })
 

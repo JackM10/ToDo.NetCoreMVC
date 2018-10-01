@@ -1,5 +1,4 @@
 ﻿window.onload = function () {
-
 	//Day-Night mode control:
     var changeDayNightMode = GetDocumentElementByID('changeDayNightModeBtn');
 	var isDayModeSelected;
@@ -9,7 +8,7 @@
 	}
 
     if (isDayModeSelected) {
-        document.body.style.backgroundColor = "grey";
+		document.body.style.background = "linear-gradient(90deg, #75a3a3, #3d5c5c)";
         isDayModeSelected = false;
     } else {
         document.body.style.backgroundColor = "white";
@@ -18,17 +17,17 @@
 
     changeDayNightMode.onclick = () => {
         if (isDayModeSelected) {
-            document.body.style.backgroundColor = "grey";
-			isDayModeSelected = false;
+	        document.body.style.background = "linear-gradient(90deg, #75a3a3, #3d5c5c)";
+	        isDayModeSelected = false;
             //Saving day\night mode in local storage:
             window.localStorage.isDayModeSelected = "false";
-        } else {
+		} else {
+			document.body.removeAttribute("style");
             document.body.style.backgroundColor = "white";
 			isDayModeSelected = true;
             window.localStorage.isDayModeSelected = "true";
         }
 	};
-
     
 	//request tooltip:
 	changeDayNightMode.addEventListener("mousemove", mouseMoveUnderChangeDayModeBtnHandler, false);

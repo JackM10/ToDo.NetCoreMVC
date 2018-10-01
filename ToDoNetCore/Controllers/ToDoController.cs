@@ -119,7 +119,7 @@ namespace ToDoNetCore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New([Bind("ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
+        public async Task<IActionResult> New([Bind("TaskId,ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
         {
             if (!ModelState.IsValid)
             {
@@ -146,18 +146,19 @@ namespace ToDoNetCore.Controllers
 
         public IActionResult ViewOneItem(int id)
         {
+            var selectedToDo = new ToDoModel();
             foreach (var td in _context.ToDo)
             {
                 if (td.TaskId == id)
                 {
-                    ViewBag.EntityDescrToView = td.Description;
-                    ViewBag.EntityNameToView = td.ShortName;
+                    selectedToDo.ShortName = td.ShortName;
+                    selectedToDo.Description = td.Description;
+                    selectedToDo.TaskId = td.TaskId;
                     break;
                 }
             }
-            ViewBag.EntityIdToView = id;
 
-            return View();
+            return PartialView("ViewOneItem", selectedToDo);
         }
 
         [ResponseCache(Duration = 30)]
@@ -197,6 +198,11 @@ namespace ToDoNetCore.Controllers
 
         #region Helpers
 
+        /// <summary>
+        /// Check if the user exists in DB or not
+        /// </summary>
+        /// <param name="shortName"></param>
+        /// <returns></returns>
         [AcceptVerbs("Get", "Post")]
         public IActionResult IsToDoExists(string shortName)
         {
@@ -209,7 +215,7 @@ namespace ToDoNetCore.Controllers
         }
 
 
-        private Dictionary<string, object> GetUserData(string actionName) => new Dictionary<string, object>
+        private Dictionary<string, object> GetUserData(string actionName) => new Dictionary<string, object>(4)
         {
             ["User"] = HttpContext.User.Identity.Name,
             ["Authenticated"] = HttpContext.User.Identity.IsAuthenticated,

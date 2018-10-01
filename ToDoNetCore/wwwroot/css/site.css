@@ -7,6 +7,8 @@
 	width: auto;
 	background: #008b8b;
 	user-select: none;
+	border-collapse: separate;
+	border-spacing: 0;
 }
 
 .btn-link{
@@ -19,4 +21,10 @@
   text-decoration:underline;
   font-family:inherit;
   font-size:inherit;
+}
+
+.table td {
+	border: 1px solid #00ffff;
+	border-width: 0 1px 1px;
+	border-radius: 5px;
 }

@@ -30,9 +30,15 @@
 	{
 		<div class="alert alert-success" id="toDoSuccessCreatedAlert">@TempData["ToDoIsCreated"]</div>
 	}
+	<script>
+		$( function() {
+			$( "#sortable" ).sortable();
+			$( "#sortable" ).disableSelection();
+		} );
+	</script>
 </head>
 <body>
-	<table class="table">
+	<table class="table" id="toDoTable">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -44,41 +50,17 @@
 		<th scope="row">
 			@foreach (var todo in Model)
 			{
-			<tr>
+			<tr id="sortable">
 				<td>@todo.ShortName</td>
 				<td>@todo.Description</td>
 				<td>
-					<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new {id = todo.TaskId})" role="button">View</a>
+					<a class="btn btn-default btn-xs show-todo-details" data-source="@Url.Action("ViewOneItem", "ToDo", new { id=todo.TaskId })">View</a>
 					<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
 					<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
 				</td>
 			</tr>
 		}
 			</th>
-			@*<tr>
-					<th scope="row">
-						@foreach (var todo in Model)
-						{
-							<p>@todo.ShortName</p>
-						}
-					</th>
-					<td>
-						@foreach (var todo in Model)
-						{
-							<p>@todo.Description</p>
-						}
-					</td>
-					<td>
-						@foreach (var todo in Model)
-						{
-							<p>
-								<a id="viewOneToDoButton" class="btn btn-default btn-xs" href="@Url.Action("ViewOneItem", "ToDo", new { id = todo.TaskId})" role="button">View</a>
-								<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
-								<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
-							</p>
-						}
-					</td>
-				</tr>*@
 			</tbody>
 		</table>
 		<p>
@@ -86,3 +68,14 @@
 		</p>
 	</body>
 </html>
+
+<script>
+	$(document).ready(() => {
+		$('#toDoTable tbody').on('click', 'a.show-todo-details', function () {
+			const dataSource = $(this).attr('data-source');
+			$('.modal-body').load(dataSource, function () {
+				$('#modal').modal({ show: true });
+			});
+		});
+	});
+</script>

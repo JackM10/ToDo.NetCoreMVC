@@ -1,7 +1,7 @@
-﻿@model List<ToDoNetCore.Models.ToDoModel>
+﻿@model ToDoNetCore.Models.ToDoModel
 
 @{
-		Layout = "_Layout";
+//Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -11,7 +11,8 @@
 	<title>Item #@ViewBag.EntityIdToView</title>
 	<link rel="stylesheet" href="~/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/bootstrap-theme.min.css" />
-	<link href="~/css/ViewOneItem.min.css" rel="stylesheet" />
+	@*<link href="~/css/ViewOneItem.min.css" rel="stylesheet" />*@
+	<script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body>
 <div>
@@ -22,7 +23,7 @@
 					Item ID:
 				</div>
 					<div class="col-sm-10 control-label">
-						<input type="text" class="form-control" placeholder="@ViewBag.EntityIdToView" readonly />
+						<input type="text" class="form-control" placeholder="@Model.TaskId" readonly />
 					</div>
 			</div>
 			<div class="form-group">
@@ -30,7 +31,7 @@
 						Item Name:
 					</div>
 					<div class="col-sm-10 control-label">
-						<input type="text" class="form-control" placeholder="@ViewBag.EntityNameToView" readonly />
+						<input type="text" class="form-control" placeholder="@Model.ShortName" readonly />
 					</div>
 			</div>
 			<div class="form-group">
@@ -38,7 +39,7 @@
 						Item Description:
 					</div>
 					<div class="col-sm-10 control-label">
-						<input type="text" class="form-control" placeholder="@ViewBag.EntityDescrToView" readonly />
+						<input type="text" class="form-control" placeholder="@Model.Description" readonly />
 					</div>
 			</div>
 		</div>

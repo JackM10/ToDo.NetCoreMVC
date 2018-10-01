@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -31,8 +32,9 @@ namespace ToDoNetCore.Models
 
         public async Task Remove(ToDoModel toDoToDelete)
         {
-            context.ToDo.Remove(toDoToDelete);
-            await SaveChangesAsync();
+            var parammTaskId = new SqlParameter("@ToDoId", toDoToDelete.TaskId);
+
+            int amountOfAffectedRows = await context.Database.ExecuteSqlCommandAsync("[ToDo.ToDo.DeleteToDo] @ToDoId", parammTaskId);
         }
 
         public async Task Add(ToDoModel tdModel)

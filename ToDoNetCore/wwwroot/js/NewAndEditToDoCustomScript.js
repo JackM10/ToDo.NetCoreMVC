@@ -23,5 +23,11 @@ window.onload = function() {
 
 	
 
+		var submitButton = $('#submitButton');
+	submitButton.click(function () {
+			submitButton.addClass('is-loading');
+			setTimeout(function () { }, 3000);
+			document.getElementById("new-todo-form").submit();
+		});
 
 }
