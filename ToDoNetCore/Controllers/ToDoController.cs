@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting.Server;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,12 +15,6 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Models;
 
@@ -45,8 +45,8 @@ namespace ToDoNetCore.Controllers
 
         #region Action Methods
 
-        public ViewResult List() => View(_context.ToDo.ToList());
-        
+        public async Task<ViewResult> List() => View(await _context.ToDo.AsNoTracking().ToListAsync());
+
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
@@ -80,7 +80,7 @@ namespace ToDoNetCore.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (ToDoExist(editedToDo.TaskId))
+                    if (await ToDoExist(editedToDo.TaskId))
                     {
                         return NotFound();
                     }
@@ -96,10 +96,8 @@ namespace ToDoNetCore.Controllers
             return View(editedToDo);
         }
 
-        private bool ToDoExist(int taskId)
-        {
-            return _context.ToDo.Any(e => e.TaskId == taskId);
-        }
+        private async Task<bool> ToDoExist(int taskId) =>
+            await _context.ToDo.AsNoTracking().AnyAsync(e => e.TaskId == taskId);
 
         [Authorize]
         public async Task<IActionResult> Delete(string entityNameToRemove)
@@ -114,7 +112,7 @@ namespace ToDoNetCore.Controllers
 
             return RedirectToAction(nameof(List));
         }
-        
+
         public ViewResult New() => View();
 
         [HttpPost]
@@ -144,21 +142,15 @@ namespace ToDoNetCore.Controllers
             return RedirectToAction(nameof(List));
         }
 
-        public IActionResult ViewOneItem(int id)
+        public async Task<IActionResult> ViewOneItem(int id)
         {
-            var selectedToDo = new ToDoModel();
-            foreach (var td in _context.ToDo)
+            var selectedToDo = await _context.ToDo.AsNoTracking().Where(t => t.TaskId == id).FirstOrDefaultAsync();
+            if(selectedToDo != null)
             {
-                if (td.TaskId == id)
-                {
-                    selectedToDo.ShortName = td.ShortName;
-                    selectedToDo.Description = td.Description;
-                    selectedToDo.TaskId = td.TaskId;
-                    break;
-                }
+                return PartialView("ViewOneItem", selectedToDo);
             }
 
-            return PartialView("ViewOneItem", selectedToDo);
+            return NotFound();
         }
 
         [ResponseCache(Duration = 30)]
@@ -206,7 +198,7 @@ namespace ToDoNetCore.Controllers
         [AcceptVerbs("Get", "Post")]
         public IActionResult IsToDoExists(string shortName)
         {
-            if (_context.ToDo.Any(td => td.ShortName == shortName))
+            if (_context.ToDo.AsNoTracking().Any(td => td.ShortName == shortName))
             {
                 return Json(data: $"ToDo with the same name already in DB.");
             }
@@ -222,7 +214,6 @@ namespace ToDoNetCore.Controllers
             ["Auth Type"] = HttpContext.User.Identity.AuthenticationType,
             ["In Jack Role"] = HttpContext.User.IsInRole("JackRole")
         };
-        
 
         #endregion
     }

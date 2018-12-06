@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ToDoNetCore.Controllers;
@@ -14,7 +15,7 @@ namespace ToDoNetCore.Tests
     public class TestsForToDoController
     {
         [Fact]
-        public void ListReturnAllValuesFromRepo()
+        public async Task ListReturnAllValuesFromRepo()
         {
             //Arrange
             var data = (new List<ToDoModel> { new ToDoModel { ShortName = "testName", Description = "testDescription" } }).AsQueryable();
@@ -23,7 +24,7 @@ namespace ToDoNetCore.Tests
             ToDoController controller = new ToDoController(mock.Object, null, null, null);
 
             //Act
-            var result = controller.List();
+            var result = await controller.List();
 
             //Assert
             Assert.IsType<ViewResult>(result);

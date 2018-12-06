@@ -9,6 +9,7 @@ using Moq;
 using ToDoNetCore.Controllers;
 using ToDoNetCore.Models;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace ToDoNetCore.Tests
 {
@@ -28,7 +29,7 @@ namespace ToDoNetCore.Tests
     public class ToDoControllersBenchmarks
     {
         [Benchmark]
-        public void ReturnAllValuesFromRepo()
+        public async Task ReturnAllValuesFromRepo()
         {
             //Arrange
             var data = (new List<ToDoModel> { new ToDoModel { ShortName = "testName", Description = "testDescription" } }).AsQueryable();
@@ -37,7 +38,7 @@ namespace ToDoNetCore.Tests
             ToDoController controller = new ToDoController(mock.Object, null, null, null);
 
             //Act
-            var result = controller.List();
+            var result = await controller.List();
 
             //Assert
             Assert.IsType<ViewResult>(result);
