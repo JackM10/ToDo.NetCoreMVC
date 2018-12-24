@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ToDoNetCore.Controllers;
 using ToDoNetCore.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace ToDoNetCore
 {
@@ -20,6 +21,7 @@ namespace ToDoNetCore
     {
         public AppSettings AppSettings { get; set; }
         public IConfiguration Configuration { get; }
+        private const string DefaultCorsPolicyName = "localhost";
 
         public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
@@ -32,7 +34,7 @@ namespace ToDoNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options => options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName)));
             services.AddResponseCompression();
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
@@ -54,6 +56,20 @@ namespace ToDoNetCore
                 .AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Account/Login");
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+
+            // CORS added for Angular UI
+            services.AddCors(
+                options => options.AddPolicy(
+                    DefaultCorsPolicyName,
+                    builder => builder
+                        .WithOrigins(
+                            "http://localhost:4200"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                )
+            );
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
