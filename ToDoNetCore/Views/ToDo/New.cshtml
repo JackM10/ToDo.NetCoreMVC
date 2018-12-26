@@ -49,7 +49,7 @@
 </head>
 <body>
 <div>
-	<form asp-action="New" novalidate id="new-todo-form">
+	<form asp-action="New" novalidate enctype="multipart/form-data" id="new-todo-form">
 		<div class="form-horizontal">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
@@ -72,6 +72,12 @@
 						<label asp-for="Description" class="col-md-2 control-label">Please fill the the Description:</label>
 						<input asp-for="Description" type="text" class="form-control" placeholder="Entity description" id="descriptionField">
 						<span asp-validation-for="Description" class="text-danger"></span>
+					</div>
+				</p>
+				<p>
+					<div class="mouseOverAndLeave">
+						<label class="col-md-2 control-label">Upload file:</label>
+						<input type="file" name="uploadedFile" />
 					</div>
 				</p>
 				@*<p>

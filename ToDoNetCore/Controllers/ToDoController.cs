@@ -117,28 +117,32 @@ namespace ToDoNetCore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New([Bind("TaskId,ShortName,Description")] ToDoModel tdModel, IFormFile uploadedFile)
+        public async Task<IActionResult> New(ToDoModel tdModel, IFormFile uploadedFile)
         {
             if (!ModelState.IsValid)
             {
                 return View(tdModel);
             }
 
-            await _context.Add(tdModel);
+            var saveToDoTask = _context.Add(tdModel);
 
             if (uploadedFile != null)
             {
-                //ToDo: After using of IToDoRepo interface it's required to rebuild file upload functionality
-                //string path = "/Files/" + uploadedFile.FileName;
-                //using (var filestraem = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                //{
-                //    await uploadedFile.CopyToAsync(filestraem);
-                //}
-                //FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
-                //_context.File.Add(file);
-                //_context.SaveChanges();
+                // full path to file in temp location
+                var filePath = Path.Combine(_appEnvironment.WebRootPath, uploadedFile.FileName);
+
+                if (uploadedFile.Length > 0)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await uploadedFile.CopyToAsync(stream);
+                    }
+                }
             }
+
+            await saveToDoTask;
             TempData["ToDoIsCreated"] = "ToDo Sucesfully created!";
+
             return RedirectToAction(nameof(List));
         }
 
