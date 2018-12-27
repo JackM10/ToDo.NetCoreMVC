@@ -17,6 +17,11 @@ using System.Threading.Tasks;
 using System.Web;
 using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Models;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace ToDoNetCore.Controllers
 {
@@ -218,6 +223,22 @@ namespace ToDoNetCore.Controllers
             ["Auth Type"] = HttpContext.User.Identity.AuthenticationType,
             ["In Jack Role"] = HttpContext.User.IsInRole("JackRole")
         };
+
+        private static void ResizeImage(string imageFileName, string pathToImage, int width = 400, int height = 299)
+        {
+            var newFileName = imageFileName + "_AfterResize.jpg";
+            var imageFileNamePath = Path.Combine(pathToImage, imageFileName);
+            var newImageFilePathName = Path.Combine(pathToImage, newFileName);
+
+            using (var image = new Bitmap(imageFileNamePath))
+            {
+                var newImage = new Bitmap(image);
+                Image<Bgr, Byte> img = new Image<Bgr, Byte>(newImage);
+                Size newSize = new Size(width, height);
+                img = img.Resize(400, 299, Emgu.CV.CvEnum.Inter.Nearest);
+                img.ToBitmap().Save(newFileName, ImageFormat.Jpeg);
+            }
+        }
 
         #endregion
     }
