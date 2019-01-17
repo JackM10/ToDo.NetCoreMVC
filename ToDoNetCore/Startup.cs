@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using ToDoNetCore.Controllers;
 using ToDoNetCore.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using ToDoNetCore.Infrastructure.Cache;
 
 namespace ToDoNetCore
 {
@@ -34,7 +35,8 @@ namespace ToDoNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName)));
+            services.AddMemoryCache();
+            services.AddMvc(options => options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName))).SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
             services.AddResponseCompression();
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
@@ -56,6 +58,7 @@ namespace ToDoNetCore
                 .AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Account/Login");
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+            services.AddSingleton<ToDoMemCache>();
 
             // CORS added for Angular UI
             services.AddCors(

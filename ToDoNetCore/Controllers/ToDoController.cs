@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
 using ToDoNetCore.Infrastructure;
+using ToDoNetCore.Infrastructure.Cache;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Controllers
@@ -28,16 +30,24 @@ namespace ToDoNetCore.Controllers
         private ApplicationUptime appUptime;
         private IHostingEnvironment _appEnvironment;
         private readonly ILogger<ToDoController> _log;
+        //private IMemoryCache _cache;
+        private MemoryCache _cache;
 
         #endregion
 
         #region Constructors
 
-        public ToDoController(IToDoRepository context, IHostingEnvironment appEnvironment, ILogger<ToDoController> log, ApplicationUptime up)
+        public ToDoController(IToDoRepository context,
+                              IHostingEnvironment appEnvironment,
+                              ILogger<ToDoController> log,
+                              //IMemoryCache cache,
+                              ToDoMemCache cache,
+                              ApplicationUptime up)
         {
             _context = context;
             _appEnvironment = appEnvironment;
             _log = log;
+            _cache = cache.Cache;
             appUptime = up;
         }
 
@@ -148,8 +158,17 @@ namespace ToDoNetCore.Controllers
 
         public async Task<IActionResult> ViewOneItem(int id)
         {
-            var selectedToDo = await _context.ToDo.AsNoTracking().Where(t => t.TaskId == id).FirstOrDefaultAsync();
-            if(selectedToDo != null)
+            ToDoModel selectedToDo;
+
+            if (!_cache.TryGetValue(CacheKeys.Entry, out selectedToDo))
+            {
+                selectedToDo = await _context.ToDo.AsNoTracking().Where(t => t.TaskId == id).FirstOrDefaultAsync();
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSize(128)
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(1));
+                _cache.Set(CacheKeys.Entry, selectedToDo, cacheEntryOptions);
+            }
+            if (selectedToDo != null)
             {
                 return PartialView("ViewOneItem", selectedToDo);
             }
