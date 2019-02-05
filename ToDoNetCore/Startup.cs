@@ -38,9 +38,9 @@ namespace ToDoNetCore
             services.AddResponseCompression();
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
-                options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
+                options.UseSqlServer("Data Source=10.10.10.36;Initial Catalog=ToDo;Persist Security Info=True;User ID=sa;Password=1Secure*password1"));
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
+                options.UseSqlServer("Data Source=10.10.10.36;Initial Catalog=ToDo;Persist Security Info=True;User ID=sa;Password=1Secure*password1"));
             services.AddSingleton<ApplicationUptime>();
             services.Configure<ApplicationConfigurations>(Configuration.GetSection("ApplicationConfigurations"));
             services.AddIdentity<AppUser, IdentityRole>(opts =>
@@ -56,6 +56,7 @@ namespace ToDoNetCore
                 .AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Account/Login");
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+            //services.AddNCacheDistributedCache();
 
             // CORS added for Angular UI
             services.AddCors(
