@@ -35,7 +35,7 @@ namespace ToDoNetCore.Tests
             var data = (new List<ToDoModel> { new ToDoModel { ShortName = "testName", Description = "testDescription" } }).AsQueryable();
             Mock<IToDoRepository> mock = new Mock<IToDoRepository>();
             mock.SetupGet(s => s.ToDo).Returns(data);
-            ToDoController controller = new ToDoController(mock.Object, null, null, null);
+            ToDoController controller = new ToDoController(mock.Object, null, null, null, null);
 
             //Act
             var result = await controller.List();
