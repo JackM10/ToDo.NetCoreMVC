@@ -19,6 +19,7 @@ using System.Web;
 using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Infrastructure.Cache;
 using ToDoNetCore.Models;
+using ToDoNetCore.Repositories;
 
 namespace ToDoNetCore.Controllers
 {
@@ -32,6 +33,7 @@ namespace ToDoNetCore.Controllers
         private readonly ILogger<ToDoController> _log;
         //private IMemoryCache _cache;
         private MemoryCache _cache;
+        private ToDoRepository _toDoRepository { get; }
 
         #endregion
 
@@ -49,13 +51,14 @@ namespace ToDoNetCore.Controllers
             _log = log;
             _cache = cache.Cache;
             appUptime = up;
+            _toDoRepository = new ToDoRepository(_context);
         }
 
         #endregion
 
         #region Action Methods
 
-        public async Task<ViewResult> List() => View(await _context.ToDo.AsNoTracking().ToListAsync());
+        public async Task<ViewResult> List() => View(await _toDoRepository.GetAllToDos());
 
         [Authorize]
         public async Task<IActionResult> Edit(int id)
