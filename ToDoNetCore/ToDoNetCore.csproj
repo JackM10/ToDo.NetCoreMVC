@@ -24,10 +24,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <!--<PackageReference Include="Microsoft.VisualStudPackageTargetFallback io.Web.CodeGeneration.Design" Version="2.0.2" />-->
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0-dev-00023" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     <PackageReference Include="ZNetCS.AspNetCore.Compression" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\Files\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GPUImageResizer\GPUImageResizer.csproj" />
   </ItemGroup>
 
 </Project>

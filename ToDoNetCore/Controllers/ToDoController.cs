@@ -141,15 +141,17 @@ namespace ToDoNetCore.Controllers
 
             if (uploadedFile != null)
             {
-                // full path to file in temp location
-                var filePath = Path.Combine(_appEnvironment.WebRootPath, uploadedFile.FileName);
+                var fullPathToFileInTmpStorage = Path.Combine(_appEnvironment.WebRootPath, uploadedFile.FileName);
 
                 if (uploadedFile.Length > 0)
                 {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    using (var stream = new FileStream(fullPathToFileInTmpStorage, FileMode.Create))
                     {
                         await uploadedFile.CopyToAsync(stream);
                     }
+                    //Resie image (ToDo: move it to hangfire as a background job)
+                    var resizer = new GPUImageResizer.GPUImageResizer();
+                    resizer.ResizeImage(uploadedFile.FileName, _appEnvironment.WebRootPath);
                 }
             }
 
