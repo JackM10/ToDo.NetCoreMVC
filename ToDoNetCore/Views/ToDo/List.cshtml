@@ -32,8 +32,8 @@
 	}
 	<script>
 		$( function() {
-			$( "#sortable" ).sortable();
-			$( "#sortable" ).disableSelection();
+			$( ".sortable" ).sortable();
+			$( ".sortable" ).disableSelection();
 		} );
 	</script>
 </head>
@@ -50,11 +50,11 @@
 		<th scope="row">
 			@foreach (var todo in Model)
 			{
-			<tr id="sortable">
+			<tr class="sortable">
 				<td>@todo.ShortName</td>
 				<td>@todo.Description</td>
 				<td>
-					<a class="btn btn-default btn-xs show-todo-details" data-source="@Url.Action("ViewOneItem", "ToDo", new { id=todo.TaskId })">View</a>
+					<a class="btn btn-default btn-xs show-todo-details" href="@Url.Action("ViewOneItem", "ToDo", new { id=todo.TaskId })">View</a>
 					<a id="editToDoButton" class="btn btn-warning btn-xs" asp-action="Edit" asp-route-id="@todo.TaskId">Edit</a>
 					<a id="deleteToDoButton" class="btn btn-primary btn-xs" href="@Url.Action("Delete", "ToDo", new {entityNameToRemove = todo.ShortName})" role="button">Delete</a>
 				</td>
