@@ -22,11 +22,4 @@ namespace ToDoNetCore.Models
         [StringLength(60, MinimumLength = 5)]
         public string Description { get; set; }
     }
-
-    public class FileModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
-    }
 }

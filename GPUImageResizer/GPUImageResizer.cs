@@ -6,10 +6,12 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace GPUImageResizer
 {
-    public class GPUImageResizer
+    [StructLayout(LayoutKind.Auto)]
+    public struct GPUImageResizer
     {
         public void ResizeImage(string imageName, string pathToImages, int width = 400, int height = 299)
         {
@@ -24,11 +26,11 @@ namespace GPUImageResizer
                 if (new CudaDeviceInfo().IsCompatible)
                 {
                     var cudaImg = new CudaImage<Bgr, Byte>(img);
-                    cudaImg.Resize(newSize, Inter.Linear).Bitmap.Save(newFileName, ImageFormat.Jpeg);
+                    cudaImg.Resize(newSize, Inter.Linear).Bitmap.Save(newImageFilePathName, ImageFormat.Jpeg);
                 }
                 else
                 {
-                    img.Resize(400, 299, Emgu.CV.CvEnum.Inter.Nearest).ToBitmap().Save(newFileName, ImageFormat.Jpeg);
+                    img.Resize(400, 299, Emgu.CV.CvEnum.Inter.Nearest).ToBitmap().Save(newImageFilePathName, ImageFormat.Jpeg);
                 }
             }
         }
