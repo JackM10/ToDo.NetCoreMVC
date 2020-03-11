@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ToDoNetCore.Controllers;
+using ToDoNetCore.Infrastructure.Cache;
 using ToDoNetCore.Models;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace ToDoNetCore.Tests
             var data = (new List<ToDoModel> { new ToDoModel { ShortName = "testName", Description = "testDescription" } }).AsQueryable();
             Mock<IToDoRepository> mock = new Mock<IToDoRepository>();
             mock.SetupGet(s => s.ToDo).Returns(data);
-            ToDoController controller = new ToDoController(mock.Object, null, null, null, null);
+            ToDoController controller = new ToDoController(mock.Object, null, null, new ToDoMemCache(), null);
 
             //Act
             var result = await controller.List();
@@ -40,7 +41,7 @@ namespace ToDoNetCore.Tests
             Mock<IToDoRepository> mock = new Mock<IToDoRepository>();
             mock.SetupGet(s => s.ToDo).Returns(data);
 
-            ToDoController controller = new ToDoController(mock.Object, null, null, null, null);
+            ToDoController controller = new ToDoController(mock.Object, null, null, new ToDoMemCache(), null);
 
             //Act
             var result = controller.IsToDoExists(data.FirstOrDefault().ShortName);

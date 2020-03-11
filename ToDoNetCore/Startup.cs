@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ToDoNetCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using ToDoNetCore.Controllers;
 using ToDoNetCore.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using ToDoNetCore.Infrastructure.Cache;
+using Microsoft.Extensions.Hosting;
 
 namespace ToDoNetCore
 {
@@ -24,7 +18,7 @@ namespace ToDoNetCore
         public IConfiguration Configuration { get; }
         private const string DefaultCorsPolicyName = "localhost";
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = (new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -36,8 +30,11 @@ namespace ToDoNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
-            services.AddMvc(options => options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName))).SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+            services.AddRazorPages();
+            //services.AddMvc(options => options.Filters.Add(new CorsAuthorizationFilterFactory(DefaultCorsPolicyName)));
+            services.AddMvc();
             services.AddResponseCompression();
+
             services.AddTransient<IToDoRepository, EFToDoRepository>();
             services.AddDbContext<ToDoContext>(options => 
                 options.UseSqlServer(Configuration["Data:ToDoNetCore:ConnectionString"]));
@@ -75,7 +72,7 @@ namespace ToDoNetCore
             );
         }
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -88,22 +85,22 @@ namespace ToDoNetCore
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors("default");
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseMiddleware<StatusCodeHandlingMiddleware>();
-            app.UseAuthentication();
             app.UseResponseCompression();
 
-            app.UseMvc(controller =>
+            app.UseEndpoints(endpoint =>
             {
-                controller.MapRoute(
-                    "ViewOneToDo",
-                    "ToDos/ID-{id:int}",
+                endpoint.MapControllerRoute("ViewOneToDo", "ToDos/ID-{id:int}",
                     new {controller = "ToDo", action = "ViewOneItem"});
-
-                controller.MapRoute(
-                    "default", 
-                    "{controller}/{action}/{id?}",
-                    new {controller = "ToDo", action = "List"});
+                endpoint.MapControllerRoute("default", "{controller}/{action}/{id?}",
+                    new { controller = "ToDo", action = "List" });
+                endpoint.MapRazorPages();
             });
         }
     }

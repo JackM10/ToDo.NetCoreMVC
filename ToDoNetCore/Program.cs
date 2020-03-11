@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace ToDoNetCore
 {
@@ -13,27 +8,27 @@ namespace ToDoNetCore
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
-            //var host = new WebHostBuilder()
-            //    .UseKestrel()
-            //    .UseContentRoot(Directory.GetCurrentDirectory())
-            //    .UseIISIntegration()
-            //    .UseStartup<Startup>()
-            //    .UseApplicationInsights()
-            //    .Build();
-
-            //host.Run();
-        }
-        
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder()
-                .UseKestrel()
+            var host = new HostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .ConfigureLogging((ctx, logging) => { }) // No logging
-                .UseStartup<Startup>()
-                .UseSetting("DesignTime", "true")
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
+                })
                 .Build();
+
+            host.Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(serverOptions => { })
+                        .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
+                });
     }
 }

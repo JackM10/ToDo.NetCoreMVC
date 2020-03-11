@@ -10,6 +10,7 @@ using ToDoNetCore.Controllers;
 using ToDoNetCore.Models;
 using Xunit;
 using System.Threading.Tasks;
+using ToDoNetCore.Infrastructure.Cache;
 
 namespace ToDoNetCore.Tests
 {
@@ -35,7 +36,7 @@ namespace ToDoNetCore.Tests
             var data = (new List<ToDoModel> { new ToDoModel { ShortName = "testName", Description = "testDescription" } }).AsQueryable();
             Mock<IToDoRepository> mock = new Mock<IToDoRepository>();
             mock.SetupGet(s => s.ToDo).Returns(data);
-            ToDoController controller = new ToDoController(mock.Object, null, null, null, null);
+            ToDoController controller = new ToDoController(mock.Object, null, null, new ToDoMemCache(), null);
 
             //Act
             var result = await controller.List();
