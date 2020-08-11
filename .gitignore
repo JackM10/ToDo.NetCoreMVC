@@ -2,6 +2,7 @@ bin/
 obj/
 packages/
 *.dll
+.vs/
 
 # Windows image file caches
 Thumbs.db

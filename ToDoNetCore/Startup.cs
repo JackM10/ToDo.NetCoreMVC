@@ -70,6 +70,24 @@ namespace ToDoNetCore
                         .AllowCredentials()
                 )
             );
+
+            services.AddSwaggerGen(c =>
+
+            {
+
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+
+                {
+
+                    Version = "v1",
+
+                    Title = "ToDo API",
+
+                    Description = "This is list of available API, endpoints and dtos for this education\test ToDo app"
+
+                });
+
+            });
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -101,6 +119,17 @@ namespace ToDoNetCore
                 endpoint.MapControllerRoute("default", "{controller}/{action}/{id?}",
                     new { controller = "ToDo", action = "List" });
                 endpoint.MapRazorPages();
+            });
+
+            app.UseSwagger();
+
+
+            app.UseSwaggerUI(c =>
+
+            {
+
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoAPI");
+
             });
         }
     }
