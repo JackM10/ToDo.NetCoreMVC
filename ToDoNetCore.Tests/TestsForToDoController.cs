@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ToDoNetCore.Controllers;
+using ToDoNetCore.DAL.Models;
 using ToDoNetCore.Infrastructure.Cache;
 using ToDoNetCore.Models;
 using Xunit;

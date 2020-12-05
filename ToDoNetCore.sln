@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoNetCore", "ToDoNetCore\ToDoNetCore.csproj", "{200E7936-9524-4E0F-BDF8-A3357BB55024}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoNetCore.Tests", "ToDoNetCore.Tests\ToDoNetCore.Tests.csproj", "{71D467E9-5790-456F-B38E-F213ABDBF1BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPUImageResizer", "GPUImageResizer\GPUImageResizer.csproj", "{A70F992F-8897-4BC1-BD57-28949E17EFDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoNetCore.DAL", "ToDoNetCore.DAL\ToDoNetCore.DAL.csproj", "{827FB5F2-448D-4B92-BC20-8E75D49C569D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{A70F992F-8897-4BC1-BD57-28949E17EFDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A70F992F-8897-4BC1-BD57-28949E17EFDB}.Release|x64.ActiveCfg = Release|x64
 		{A70F992F-8897-4BC1-BD57-28949E17EFDB}.Release|x64.Build.0 = Release|x64
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Debug|x64.Build.0 = Debug|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Release|x64.ActiveCfg = Release|Any CPU
+		{827FB5F2-448D-4B92-BC20-8E75D49C569D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

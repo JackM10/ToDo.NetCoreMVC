@@ -11,19 +11,64 @@ using ToDoNetCore.Models;
 using Xunit;
 using System.Threading.Tasks;
 using ToDoNetCore.Infrastructure.Cache;
+using Microsoft.EntityFrameworkCore;
+using ToDoNetCore.DAL;
+using ToDoNetCore.DAL.Models;
 
 namespace ToDoNetCore.Tests
 {
     public class PerformanceTestsForToDoController
     {
+        private readonly ToDoContext _context;
+
+        public PerformanceTestsForToDoController()
+        {
+            var ctxFactory = new ToDoContextFactory(""); //connection string via DI?
+            _context = ctxFactory.CreateDbContext(null);
+        }
+
         [Fact]
-        public void ListReturnAllValuesFromRepoLessThan100ms()
+        public async Task ListReturnAllValuesFromRepoLessThan100ms()
         {
             //Arrange & Act
             var benchSummary = BenchmarkRunner.Run<ToDoControllersBenchmarks>();
+
+            //get previous measurments:
+            var previousMeasurments = await GetPreviousMeasurments();
+
+            await SaveCurrentMeasurments();
+
+            //If amount of measurments is small, warn about it
+            var isMoreMeasurmentsRequired = DoWeHaveEnoughOfData(previousMeasurments);
+
+            while (isMoreMeasurmentsRequired)
+            {
+                benchSummary = BenchmarkRunner.Run<ToDoControllersBenchmarks>();
+                previousMeasurments = await GetPreviousMeasurments();
+                isMoreMeasurmentsRequired = DoWeHaveEnoughOfData(previousMeasurments);
+            }
+
             
             //Assert
             Assert.True(benchSummary.Reports[0].ResultStatistics.Mean < 100);
+
+            bool DoWeHaveEnoughOfData(List<PerformanceMeasurment> data)
+            {
+                if (data.Count <= 50)
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            async Task SaveCurrentMeasurments()
+            {
+                await _context.Measurments.AddAsync(new PerformanceMeasurment { Median = benchSummary.Reports[0].ResultStatistics.Mean, TestName = nameof(ListReturnAllValuesFromRepoLessThan100ms) });
+                await _context.SaveChangesAsync();
+            }
+
+            async Task<List<PerformanceMeasurment>> GetPreviousMeasurments() =>
+                await _context.Measurments.Where(m => m.TestName.Equals(nameof(ListReturnAllValuesFromRepoLessThan100ms))).ToListAsync();
         }
     }
 

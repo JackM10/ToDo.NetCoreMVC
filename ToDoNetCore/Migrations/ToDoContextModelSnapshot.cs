@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
+using ToDoNetCore.DAL;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Migrations

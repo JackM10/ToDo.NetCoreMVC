@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using ToDoNetCore.DAL;
+using ToDoNetCore.DAL.Models;
 
 namespace ToDoNetCore.Models
 {
@@ -31,8 +33,6 @@ namespace ToDoNetCore.Models
         public async Task Remove(ToDoModel toDoToDelete)
         {
             var parammTaskId = new SqlParameter("@ToDoId", toDoToDelete.TaskId);
-
-            int amountOfAffectedRows = await context.Database.ExecuteSqlCommandAsync("[ToDo.ToDo.DeleteToDo] @ToDoId", parammTaskId);
         }
 
         public async Task Add(ToDoModel tdModel)

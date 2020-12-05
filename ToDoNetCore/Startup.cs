@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Infrastructure.Cache;
 using Microsoft.Extensions.Hosting;
+using ToDoNetCore.DAL;
 
 namespace ToDoNetCore
 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDoNetCore.DAL.Models;
 using ToDoNetCore.Models;
 
 namespace ToDoNetCore.Repositories

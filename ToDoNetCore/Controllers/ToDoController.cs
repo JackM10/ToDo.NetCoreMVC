@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web;
+using ToDoNetCore.DAL.Models;
 using ToDoNetCore.Infrastructure;
 using ToDoNetCore.Infrastructure.Cache;
 using ToDoNetCore.Models;
